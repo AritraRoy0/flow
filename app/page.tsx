@@ -430,8 +430,8 @@ const buildExport = (state: {
 /* ------------------------------------------------------------------ */
 
 const CSS = `
-html body { background: #0b0e11; }
-html[data-flow-theme="light"] body { background: #f2f2ef; }
+html body { background: #12201b; }
+html[data-flow-theme="light"] body { background: #f7f3dc; }
 
 /* globals.css sets overflow-x:hidden on html/body, which makes them scroll
    containers and breaks the sticky topbar and rails. \`clip\` clips the same
@@ -440,37 +440,43 @@ html:root { overflow-x: clip; }
 html:root > body { overflow-x: clip; }
 
 .f-app {
-  /* Ink & Chamber: a warm-dark editorial palette in place of a stock
-     teal/coral SaaS scheme — jade for Government, burnished copper for
-     Opposition, brass for warnings and voting issues. */
-  --gov: #3fae79;
-  --opp: #c96f3a;
-  --warn: #d7a53f;
-  --danger: #cf5744;
-  --violet: #a084c9;
+  /* Legal Pad / Chalkboard: the two surfaces an actual debater flows a
+     round on. Light mode is a ruled legal pad — blue ballpoint for
+     Government, red ballpoint for Opposition, a highlighter mustard for
+     warnings, a torn-page cream for cards. Dark mode is a chalkboard —
+     the same two-pen logic redrawn in sky-blue and coral chalk. */
+  --gov: #6fb8e6;
+  --opp: #e2837c;
+  --warn: #e8c95c;
+  --danger: #d1602f;
+  --violet: #b48be0;
 
-  --bg: #0e0c09;
-  --bg-grad: radial-gradient(1200px 620px at 12% -10%, #1c170f 0%, transparent 60%),
-             radial-gradient(900px 500px at 100% 0%, #131810 0%, transparent 55%), #0e0c09;
-  --panel: #16130f;
-  --panel-2: #1a1712;
-  --raised: #201c15;
-  --line: #2e2820;
-  --line-soft: #221e17;
-  --text: #f2ece0;
-  --dim: #a89d87;
-  --faint: #756b57;
-  --primary: #f2ece0;
-  --primary-ink: #15120d;
-  --gov-bg: rgba(63, 174, 121, .14);
-  --opp-bg: rgba(201, 111, 58, .15);
-  --shadow: 0 18px 44px rgba(0, 0, 0, .46);
-  --ring: rgba(215, 165, 63, .55);
+  --bg: #12201b;
+  --bg-grad: radial-gradient(1100px 560px at 10% -10%, #17281f 0%, transparent 60%),
+             radial-gradient(900px 480px at 100% 0%, #142219 0%, transparent 55%), #12201b;
+  --panel: #182821;
+  --panel-2: #1c2f26;
+  --raised: #22392e;
+  --line: #33493d;
+  --line-soft: #253b30;
+  --text: #edf3e9;
+  --dim: #a9bcae;
+  --faint: #74897c;
+  --primary: #edf3e9;
+  --primary-ink: #142019;
+  --gov-bg: rgba(111, 184, 230, .16);
+  --opp-bg: rgba(226, 131, 124, .16);
+  --warn-bg: rgba(232, 201, 92, .18);
+  --danger-bg: rgba(209, 96, 47, .2);
+  --violet-bg: rgba(180, 139, 224, .18);
+  --shadow: 0 18px 42px rgba(0, 0, 0, .5);
+  --ring: rgba(232, 201, 92, .55);
 
   --font-ui: var(--font-geist-sans), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-mono: var(--font-geist-mono), "SFMono-Regular", "JetBrains Mono", Consolas, monospace;
-  --font-display: var(--font-fraunces), "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+  --font-hand: var(--font-caveat), "Segoe Print", "Bradley Hand", cursive;
 
+  position: relative;
   min-height: 100vh;
   background: var(--bg-grad);
   color: var(--text);
@@ -482,28 +488,45 @@ html:root > body { overflow-x: clip; }
 }
 
 .f-app[data-theme="light"] {
-  --gov: #1f7a52;
-  --opp: #a8551f;
-  --warn: #8a6414;
-  --danger: #a83a2c;
-  --violet: #6d54a0;
+  --gov: #1f5aa8;
+  --opp: #bf3a2e;
+  --warn: #a9760f;
+  --danger: #8a2a22;
+  --violet: #6a4c93;
 
-  --bg: #f6f1e7;
-  --bg-grad: radial-gradient(1100px 560px at 8% -12%, #fffdf7 0%, transparent 58%), #f6f1e7;
-  --panel: #fffdf8;
-  --panel-2: #f4efe1;
-  --raised: #fffdf8;
-  --line: #e5dcc6;
-  --line-soft: #ede6d4;
-  --text: #201b12;
-  --dim: #6f6450;
-  --faint: #9a8f75;
-  --primary: #201b12;
-  --primary-ink: #fbf7ee;
-  --gov-bg: rgba(31, 122, 82, .11);
-  --opp-bg: rgba(168, 85, 31, .12);
-  --shadow: 0 12px 30px rgba(40, 32, 16, .09);
-  --ring: rgba(138, 100, 20, .48);
+  --bg: #f7f3dc;
+  --bg-grad: radial-gradient(1200px 600px at 6% -8%, rgba(255, 255, 255, .55), transparent 60%),
+             repeating-linear-gradient(to bottom, transparent 0, transparent 25px, rgba(74, 98, 138, .15) 25px, rgba(74, 98, 138, .15) 26px),
+             #f7f3dc;
+  --panel: #fffcec;
+  --panel-2: #f7f1d8;
+  --raised: #fffdf3;
+  --line: #ddd2a4;
+  --line-soft: #ece4c2;
+  --text: #23324a;
+  --dim: #55637c;
+  --faint: #8f8968;
+  --primary: #23324a;
+  --primary-ink: #fbf6e3;
+  --gov-bg: rgba(31, 90, 168, .12);
+  --opp-bg: rgba(191, 58, 46, .12);
+  --warn-bg: rgba(169, 118, 15, .14);
+  --danger-bg: rgba(138, 42, 34, .13);
+  --violet-bg: rgba(106, 76, 147, .13);
+  --shadow: 0 10px 26px rgba(60, 50, 20, .1);
+  --ring: rgba(31, 90, 168, .45);
+}
+
+/* The legal pad's red margin rule — a thin line in the empty gutter, never
+   under any card, so it can't collide with content at any breakpoint. */
+.f-app[data-theme="light"]::before {
+  content: "";
+  position: absolute; top: 0; bottom: 0; left: 10px; width: 1px;
+  background: rgba(191, 58, 46, .4);
+  pointer-events: none; z-index: 0;
+}
+@media (max-width: 900px) {
+  .f-app[data-theme="light"]::before { display: none; }
 }
 
 .f-app *, .f-app *::before, .f-app *::after { box-sizing: border-box; }
@@ -516,12 +539,12 @@ html:root > body { overflow-x: clip; }
 .f-app textarea { resize: none; }
 .f-app :focus { outline: none; }
 .f-app :focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; border-radius: 6px; }
-.f-app ::selection { background: rgba(215, 165, 63, .32); }
+.f-app ::selection { background: rgba(232, 201, 92, .4); }
 
-/* Three-voice type system: Fraunces (serif) carries the motion and the
-   wordmark like a printed record; Geist Mono marks every label, tag, chip
-   and digit like scoreboard signage; Geist Sans is left to do the talking
-   everywhere else — body copy, inputs, buttons. */
+/* Three-voice type system: Caveat (handwriting) carries the motion and the
+   wordmark like a pen scrawl at the top of the pad; Geist Mono marks every
+   label, tag, chip and digit like a typed transcript; Geist Sans does the
+   talking everywhere else — body copy, inputs, buttons. */
 .f-mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
 .f-eyebrow {
   font-family: var(--font-mono); font-size: 9.5px; font-weight: 600; letter-spacing: .13em;
@@ -538,17 +561,17 @@ html:root > body { overflow-x: clip; }
   backdrop-filter: blur(14px) saturate(140%);
 }
 .f-brand {
-  display: flex; align-items: center; gap: 9px;
-  font-family: var(--font-display); font-style: italic; font-weight: 560;
-  font-size: 17px; letter-spacing: -.01em;
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--font-hand); font-weight: 700;
+  font-size: 21px; letter-spacing: 0;
 }
 .f-brand-mark {
   display: grid; place-items: center; width: 22px; height: 22px; border-radius: 7px;
   background: linear-gradient(150deg, var(--gov), var(--warn));
-  color: #15120d; font-family: var(--font-ui); font-style: normal;
-  font-size: 12px; font-weight: 800;
+  color: #131b16; font-family: var(--font-ui); font-weight: 800;
+  font-size: 12px;
 }
-.f-brand em { font-style: italic; color: var(--warn); }
+.f-brand em { font-style: normal; color: var(--opp); }
 .f-top-divider { width: 1px; height: 18px; background: var(--line); }
 .f-live { display: flex; align-items: center; gap: 7px; color: var(--dim); font-size: 11px; }
 .f-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--faint); }
@@ -582,11 +605,13 @@ html:root > body { overflow-x: clip; }
   border-bottom: 1px solid var(--line);
 }
 .f-strip-main { flex: 1; min-width: 0; }
-.f-motion {
-  display: block; width: 100%; margin-top: 6px; padding: 2px 8px 2px 9px;
+/* Qualified with the element type so this beats ".f-app textarea{font:inherit}"
+   on specificity — a class alone would tie and lose the handwriting face. */
+textarea.f-motion {
+  display: block; width: 100%; margin-top: 2px; padding: 2px 8px 2px 9px;
   border: 1px solid transparent; border-radius: 9px; background: transparent;
-  font-family: var(--font-display); font-weight: 480; font-size: clamp(24px, 2.9vw, 38px);
-  line-height: 1.16; letter-spacing: -.015em; color: var(--text);
+  font-family: var(--font-hand); font-weight: 700; font-size: clamp(28px, 3.4vw, 44px);
+  line-height: 1.3; letter-spacing: 0; color: var(--text);
   overflow: hidden;
   transition: background .15s ease, border-color .15s ease;
 }
@@ -601,7 +626,7 @@ html:root > body { overflow-x: clip; }
 }
 .f-team input:hover { border-color: var(--line); }
 .f-team input:focus { border-color: var(--line); background: var(--panel); }
-.f-vs { color: var(--faint); font-family: var(--font-display); font-style: italic; font-size: 13px; }
+.f-vs { color: var(--faint); font-family: var(--font-ui); font-style: italic; font-size: 12.5px; }
 
 .f-tag {
   display: inline-flex; align-items: center; height: 19px; padding: 0 7px;
@@ -648,69 +673,72 @@ html:root > body { overflow-x: clip; }
 
 /* ---------- timer ---------- */
 .f-timer {
-  /* The timer stays a dark slab in both themes, so it pins its own bright
-     accents rather than inheriting the light-theme (dark-on-light) ones. */
-  --gov: #3fae79; --gov-bg: rgba(63, 174, 121, .18);
-  --opp: #c96f3a; --opp-bg: rgba(201, 111, 58, .2);
-  --warn: #d7a53f; --danger: #cf5744; --violet: #a084c9;
+  /* The timer is a little chalkboard clock bolted to the wall — it stays
+     board-dark and chalk-bright in both page themes rather than flipping
+     to a white slab in Legal Pad mode. */
+  --gov: #6fb8e6; --gov-bg: rgba(111, 184, 230, .2);
+  --opp: #e2837c; --opp-bg: rgba(226, 131, 124, .22);
+  --warn: #e8c95c; --warn-bg: rgba(232, 201, 92, .2);
+  --danger: #d1602f; --danger-bg: rgba(209, 96, 47, .22);
+  --violet: #b48be0; --violet-bg: rgba(180, 139, 224, .2);
 
   position: relative; overflow: hidden;
-  border-radius: 14px; border: 1px solid #262015;
-  background: linear-gradient(168deg, #221c13 0%, #17130c 55%, #120f0a 100%);
-  color: #f4ede0; box-shadow: var(--shadow);
+  border-radius: 14px; border: 1px solid #2c4136;
+  background: linear-gradient(168deg, #1b2b23 0%, #142019 55%, #0f1712 100%);
+  color: #eef7ec; box-shadow: var(--shadow);
 }
-.f-app[data-theme="light"] .f-timer { border-color: #1e1810; }
+.f-app[data-theme="light"] .f-timer { border-color: #263a2f; }
 .f-timer::after {
   content: ""; position: absolute; inset: 0; pointer-events: none;
-  background: radial-gradient(520px 180px at 50% -30%, rgba(215, 165, 63, .16), transparent 70%);
+  background: radial-gradient(520px 180px at 50% -30%, rgba(232, 201, 92, .13), transparent 70%);
 }
-.f-timer.warn { border-color: color-mix(in srgb, var(--warn) 45%, #262015); }
-.f-timer.over { border-color: color-mix(in srgb, var(--danger) 55%, #262015); }
+.f-timer.warn { border-color: color-mix(in srgb, var(--warn) 45%, #2c4136); }
+.f-timer.over { border-color: color-mix(in srgb, var(--danger) 55%, #2c4136); }
 .f-timer-head {
   display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
   padding: 12px 14px 0; position: relative; z-index: 1;
 }
 .f-timer-role { padding: 10px 14px 0; position: relative; z-index: 1; }
 .f-timer-role strong { font-size: 15px; font-weight: 600; letter-spacing: -.01em; }
-.f-timer-role span { display: block; margin-top: 2px; color: #b5a88e; font-size: 11px; }
+.f-timer-role span { display: block; margin-top: 2px; color: #9db3a4; font-size: 11px; }
 .f-timer-face { position: relative; z-index: 1; display: grid; justify-items: center; padding: 14px 14px 12px; }
 .f-clock {
   font-family: var(--font-mono); font-variant-numeric: tabular-nums;
   font-size: clamp(52px, 5.6vw, 68px); font-weight: 600; line-height: 1;
-  letter-spacing: -.045em; color: #f8f1e4;
+  letter-spacing: -.045em; color: #f2f9f0;
   transition: color .3s ease;
 }
 .f-timer.warn .f-clock { color: var(--warn); }
 .f-timer.over .f-clock { color: var(--danger); }
-.f-clock-sub { margin-top: 8px; display: flex; align-items: center; gap: 8px; font-size: 10.5px; color: #ab9d81; }
+.f-clock-sub { margin-top: 8px; display: flex; align-items: center; gap: 8px; font-size: 10.5px; color: #9db3a4; }
 .f-phase {
   display: inline-flex; align-items: center; gap: 6px; height: 21px; padding: 0 9px;
   border-radius: 6px; font-family: var(--font-mono); font-size: 9.5px; font-weight: 700; letter-spacing: .1em;
-  background: rgba(255, 255, 255, .07); color: #cabe9f;
+  background: rgba(255, 255, 255, .07); color: #c4d6c9;
 }
 .f-phase.poi { color: var(--gov); background: var(--gov-bg); }
-.f-phase.protect { color: var(--violet); background: rgba(160, 132, 201, .18); }
-.f-phase.warn { color: var(--warn); background: rgba(215, 165, 63, .18); }
-.f-phase.over { color: var(--danger); background: rgba(207, 87, 68, .18); }
+.f-phase.protect { color: var(--violet); background: var(--violet-bg); }
+.f-phase.warn { color: var(--warn); background: var(--warn-bg); }
+.f-phase.over { color: var(--danger); background: var(--danger-bg); }
 
 .f-track {
   position: relative; z-index: 1; height: 6px; margin: 4px 14px 0;
   border-radius: 99px; background: rgba(255, 255, 255, .08); overflow: hidden;
 }
-.f-track-poi { position: absolute; top: 0; bottom: 0; background: rgba(63, 174, 121, .18); }
+.f-track-poi { position: absolute; top: 0; bottom: 0; background: rgba(232, 201, 92, .18); }
 .f-track-fill {
-  /* Sand-through-an-hourglass: bronze warms to gold as the speech runs,
-     then the warn/over states below take it into copper and brick. */
+  /* Chalk drawn across the board: green while there's time, then the
+     warn/over states below redraw it in yellow and red chalk. */
   position: absolute; top: 0; bottom: 0; left: 0; border-radius: 99px;
-  background: linear-gradient(90deg, #8a6a35, #d7a53f);
+  background: linear-gradient(90deg, #3f6f57, #8fd6b0);
   transition: width .18s linear, background .3s ease;
 }
-.f-timer.warn .f-track-fill { background: linear-gradient(90deg, #d7a53f, #c96f3a); }
-.f-timer.over .f-track-fill { background: linear-gradient(90deg, #c96a3a, #cf5744); }
+.f-timer.warn .f-track-fill { background: linear-gradient(90deg, #e8c95c, #e2837c); }
+.f-timer.over .f-track-fill { background: linear-gradient(90deg, #c2502a, #d1602f); }
 .f-track-mark { position: absolute; top: -2px; bottom: -2px; width: 1.5px; background: rgba(255, 255, 255, .35); }
 .f-track-legend {
   position: relative; z-index: 1; display: flex; justify-content: space-between;
-  padding: 6px 14px 0; font-family: var(--font-mono); color: #8d8065; font-size: 9.5px;
+  padding: 6px 14px 0; font-family: var(--font-mono); color: #6f8579; font-size: 9.5px;
 }
 
 .f-timer-controls {
@@ -719,26 +747,26 @@ html:root > body { overflow-x: clip; }
 }
 .f-tbtn {
   display: grid; place-items: center; height: 36px; border-radius: 9px;
-  border: 1px solid rgba(255, 255, 255, .13); color: #d9cdb0;
+  border: 1px solid rgba(255, 255, 255, .13); color: #cfe0d3;
   font-size: 11px; font-weight: 600;
   transition: background .14s ease, border-color .14s ease, color .14s ease;
 }
 .f-tbtn:hover { background: rgba(255, 255, 255, .08); color: #fff; }
 .f-tbtn.go {
   display: flex; align-items: center; justify-content: center; gap: 8px;
-  background: var(--gov); border-color: transparent; color: #0e1f16;
+  background: var(--gov); border-color: transparent; color: #0d1f2c;
   font-size: 12.5px; font-weight: 700;
 }
-.f-tbtn.go:hover { background: color-mix(in srgb, var(--gov) 88%, #fff); color: #0e1f16; }
-.f-tbtn.go.pause { background: rgba(255, 255, 255, .14); color: #f4ede0; }
+.f-tbtn.go:hover { background: color-mix(in srgb, var(--gov) 88%, #fff); color: #0d1f2c; }
+.f-tbtn.go.pause { background: rgba(255, 255, 255, .14); color: #eef7ec; }
 .f-tbtn.go.pause:hover { background: rgba(255, 255, 255, .2); }
 .f-timer-foot {
   position: relative; z-index: 1;
   display: flex; align-items: center; justify-content: space-between;
   margin-top: 12px; padding: 9px 14px; border-top: 1px solid rgba(255, 255, 255, .07);
-  color: #ab9d81; font-size: 10.5px;
+  color: #9db3a4; font-size: 10.5px;
 }
-.f-timer-foot button { color: #cabe9f; font-size: 10.5px; }
+.f-timer-foot button { color: #c4d6c9; font-size: 10.5px; }
 .f-timer-foot button:hover { color: #fff; }
 .f-flash {
   position: absolute; inset: 0; z-index: 2; pointer-events: none; border-radius: 14px;
@@ -847,15 +875,19 @@ html:root > body { overflow-x: clip; }
   font-family: var(--font-mono); font-size: 10px; font-weight: 620; letter-spacing: 0;
 }
 .f-chip .f-dot { width: 5px; height: 5px; }
-.f-chip.open { color: var(--warn); background: rgba(215, 165, 63, .15); }
+.f-chip.open { color: var(--warn); background: var(--warn-bg); }
 .f-chip.open .f-dot { background: var(--warn); }
 .f-chip.answered { color: var(--gov); background: var(--gov-bg); }
 .f-chip.answered .f-dot { background: var(--gov); }
-.f-chip.dropped { color: var(--violet); background: rgba(160, 132, 201, .16); }
+.f-chip.dropped { color: var(--violet); background: var(--violet-bg); }
 .f-chip.dropped .f-dot { background: var(--violet); }
 .f-chip.turned { color: var(--opp); background: var(--opp-bg); }
 .f-chip.turned .f-dot { background: var(--opp); }
 .f-chip.ghost { color: var(--faint); background: var(--panel-2); border-color: var(--line-soft); font-weight: 550; }
+/* A status chip is a <button> when it's clickable (cycling status) — that
+   makes ".f-app button{font:inherit}" outrank ".f-chip" on specificity and
+   silently drop it back to Geist. Bump the button case explicitly. */
+button.f-chip { font-family: var(--font-mono); }
 
 .f-card-body { padding: 0 10px 10px; }
 .f-nodes { display: grid; gap: 3px; }
@@ -877,7 +909,9 @@ html:root > body { overflow-x: clip; }
   color: var(--text); font-size: 12.2px; line-height: 1.45; overflow: hidden;
 }
 .f-node-text::placeholder { color: var(--faint); }
-.f-node-side {
+/* Always rendered as a <button> (it flips side on click) — qualify the
+   selector for the same specificity reason as button.f-chip above. */
+button.f-node-side {
   flex: 0 0 auto; margin-top: 2px; height: 16px; padding: 0 5px; border-radius: 4px;
   font-family: var(--font-mono); font-size: 8.5px; font-weight: 750; letter-spacing: 0;
 }
@@ -957,7 +991,7 @@ html:root > body { overflow-x: clip; }
 .f-poi-item button { margin-left: auto; color: var(--faint); font-size: 12px; }
 .f-poi-item button:hover { color: var(--danger); }
 .f-poi-locked {
-  padding: 9px 11px; border-radius: 9px; background: rgba(160, 132, 201, .12);
+  padding: 9px 11px; border-radius: 9px; background: var(--violet-bg);
   color: var(--violet); font-size: 11px; line-height: 1.45;
 }
 
@@ -968,7 +1002,7 @@ html:root > body { overflow-x: clip; }
 /* ---------- overlays ---------- */
 .f-scrim {
   position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 24px;
-  background: rgba(10, 8, 5, .62); backdrop-filter: blur(4px);
+  background: rgba(8, 14, 11, .64); backdrop-filter: blur(4px);
   animation: f-fade .16s ease-out;
 }
 @keyframes f-fade { from { opacity: 0 } to { opacity: 1 } }
@@ -2005,7 +2039,7 @@ export default function Home() {
             <span className="f-flash" key={`${speech.key}-${phase}`} />
             <div className="f-timer-head">
               <span className={`f-tag ${speech.side === "GOV" ? "gov" : "opp"}`}>{speech.side}</span>
-              <span className="f-mono" style={{ color: "#ab9d81", fontSize: 11 }}>
+              <span className="f-mono" style={{ color: "#9db3a4", fontSize: 11 }}>
                 Speech {current + 1} of {speeches.length}
               </span>
             </div>

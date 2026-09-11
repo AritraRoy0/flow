@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Geist, Geist_Mono } from "next/font/google";
+import { Caveat, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -12,15 +12,13 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// The editorial display face for the motion and the wordmark — everything
-// else in the app speaks in Geist. Optical sizing is left on the variable
-// axis so it self-adjusts between the small "versus" label and the large
-// motion headline instead of using one static cut at every size.
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
+// A legal-pad conceit: the motion and the wordmark read like a pen scrawl
+// at the top of a flow sheet, while everything else in the app — every
+// argument, every button — stays in plain, fast-to-read Geist.
+const caveat = Caveat({
+  variable: "--font-caveat",
   subsets: ["latin"],
-  style: ["normal", "italic"],
-  axes: ["opsz", "SOFT"],
+  weight: ["500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -32,7 +30,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable}`}
+      className={`${geistSans.variable} ${geistMono.variable} ${caveat.variable}`}
     >
       <body>{children}</body>
     </html>
