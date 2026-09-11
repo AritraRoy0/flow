@@ -1709,11 +1709,12 @@ function ArgumentCard({
 /* ------------------------------------------------------------------ */
 
 export default function Home() {
+  const sample = sampleUBIDebate();
   const [theme, setTheme] = useState<Theme>("light");
-  const [motion, setMotion] = useState("THW ban targeted political advertising");
-  const [govTeam, setGovTeam] = useState("Northbridge A");
-  const [oppTeam, setOppTeam] = useState("Harbor B");
-  const [roundLabel, setRoundLabel] = useState("Round 1");
+  const [motion, setMotion] = useState(sample.motion);
+  const [govTeam, setGovTeam] = useState(sample.govTeam);
+  const [oppTeam, setOppTeam] = useState(sample.oppTeam);
+  const [roundLabel, setRoundLabel] = useState(sample.roundLabel);
   const [grace, setGrace] = useState(DEFAULT_GRACE);
 
   const [speeches, setSpeeches] = useState<Speech[]>(makeSpeeches);
@@ -1721,9 +1722,9 @@ export default function Home() {
   const [running, setRunning] = useState(false);
   const [now, setNow] = useState(() => Date.now());
 
-  const [argumentsList, setArgumentsList] = useState<Argument[]>(starterArguments);
-  const [pois, setPois] = useState<Poi[]>([]);
-  const [notes, setNotes] = useState<Record<string, string>>({});
+  const [argumentsList, setArgumentsList] = useState<Argument[]>(sample.arguments);
+  const [pois, setPois] = useState<Poi[]>(sample.pois);
+  const [notes, setNotes] = useState<Record<string, string>>(sample.notes);
 
   const [filter, setFilter] = useState<Filter>("all");
   const [query, setQuery] = useState("");
