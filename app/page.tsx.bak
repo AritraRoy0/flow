@@ -148,7 +148,7 @@ const starterArguments = (): Argument[] => [
     side: "GOV",
     speech: "PMC",
     title: "Framework — who is the worst off actor",
-    status: "dropped",
+    status: "open",
     starred: true,
     collapsed: false,
     analysis: [
@@ -163,15 +163,7 @@ const starterArguments = (): Argument[] => [
             text: "Opp: that standard begs the question — it assumes the harm is structural.",
             side: "OPP",
             speech: "LOC",
-            replies: [
-              {
-                id: uid(),
-                text: "The structure of access itself is the harms",
-                side: "GOV",
-                speech: "MG",
-                replies: [],
-              },
-            ],
+            replies: [],
           },
         ],
       },
@@ -183,7 +175,7 @@ const starterArguments = (): Argument[] => [
     side: "GOV",
     speech: "PMC",
     title: "Contention 1 — the default actually changes",
-    status: "answered",
+    status: "open",
     starred: false,
     collapsed: false,
     analysis: [
@@ -192,26 +184,18 @@ const starterArguments = (): Argument[] => [
         text: "Uptake follows the default, so switching it moves the median person.",
         side: "GOV",
         speech: "PMC",
-        replies: [
-          {
-            id: uid(),
-            text: "Opp: but most people actively choose outside the default.",
-            side: "OPP",
-            speech: "LOC",
-            replies: [],
-          },
-        ],
+        replies: [],
       },
     ],
-    examples: ["Auto-enrolment in pensions moved participation from 40% to 90%.", "NHS opt-out organ donation increased donor consent from 17% to 37%."],
+    examples: ["Auto-enrolment in pensions moved participation from 40% to 90%."],
   },
   {
     id: uid(),
     side: "OPP",
     speech: "LOC",
     title: "The mechanism never reaches the people it promises",
-    status: "answered",
-    starred: true,
+    status: "open",
+    starred: false,
     collapsed: false,
     analysis: [
       {
@@ -219,60 +203,6 @@ const starterArguments = (): Argument[] => [
         text: "Enforcement runs through institutions the worst-off already avoid.",
         side: "OPP",
         speech: "LOC",
-        replies: [
-          {
-            id: uid(),
-            text: "Gov: but institutions are required to track and enforce.",
-            side: "GOV",
-            speech: "MG",
-            replies: [
-              {
-                id: uid(),
-                text: "Same institutions that failed to prevent the original harm.",
-                side: "OPP",
-                speech: "MO",
-                replies: [],
-              },
-            ],
-          },
-        ],
-      },
-    ],
-    examples: ["Schools are underfunded and can't enforce new requirements."],
-  },
-  {
-    id: uid(),
-    side: "OPP",
-    speech: "LOC",
-    title: "Turns Government's welfare metric",
-    status: "open",
-    starred: false,
-    collapsed: false,
-    analysis: [
-      {
-        id: uid(),
-        text: "If we measure welfare by choice freedom, then regulation limits welfare.",
-        side: "OPP",
-        speech: "LOC",
-        replies: [],
-      },
-    ],
-    examples: [],
-  },
-  {
-    id: uid(),
-    side: "GOV",
-    speech: "MG",
-    title: "Solvency — the policy solves the original problem",
-    status: "open",
-    starred: false,
-    collapsed: false,
-    analysis: [
-      {
-        id: uid(),
-        text: "Direct regulation of the harmful behaviour is the most efficient solution.",
-        side: "GOV",
-        speech: "MG",
         replies: [],
       },
     ],
@@ -515,25 +445,25 @@ html:root > body { overflow-x: clip; }
      Government, red ballpoint for Opposition, a highlighter mustard for
      warnings, a torn-page cream for cards. Dark mode is a chalkboard —
      the same two-pen logic redrawn in sky-blue and coral chalk. */
-  --gov: #333333;
-  --opp: #666666;
-  --warn: #ff9900;
-  --danger: #cc0000;
-  --violet: #770077;
+  --gov: #6fb8e6;
+  --opp: #e2837c;
+  --warn: #e8c95c;
+  --danger: #d1602f;
+  --violet: #b48be0;
 
-  --bg: #ffffff;
+  --bg: #12201b;
   --bg-grad: radial-gradient(1100px 560px at 10% -10%, #17281f 0%, transparent 60%),
              radial-gradient(900px 480px at 100% 0%, #142219 0%, transparent 55%), #12201b;
-  --panel: #f5f5f5;
-  --panel-2: #eeeeee;
-  --raised: #e8e8e8;
-  --line: #cccccc;
-  --line-soft: #dddddd;
-  --text: #000000;
-  --dim: #555555;
-  --faint: #999999;
-  --primary: #000000;
-  --primary-ink: #ffffff;
+  --panel: #182821;
+  --panel-2: #1c2f26;
+  --raised: #22392e;
+  --line: #33493d;
+  --line-soft: #253b30;
+  --text: #edf3e9;
+  --dim: #a9bcae;
+  --faint: #74897c;
+  --primary: #edf3e9;
+  --primary-ink: #142019;
   --gov-bg: rgba(111, 184, 230, .16);
   --opp-bg: rgba(226, 131, 124, .16);
   --warn-bg: rgba(232, 201, 92, .18);
@@ -558,26 +488,26 @@ html:root > body { overflow-x: clip; }
 }
 
 .f-app[data-theme="light"] {
-  --gov: #000000;
-  --opp: #333333;
-  --warn: #ff9900;
-  --danger: #cc0000;
-  --violet: #770077;
+  --gov: #1f5aa8;
+  --opp: #bf3a2e;
+  --warn: #a9760f;
+  --danger: #8a2a22;
+  --violet: #6a4c93;
 
-  --bg: #ffffff;
+  --bg: #f7f3dc;
   --bg-grad: radial-gradient(1200px 600px at 6% -8%, rgba(255, 255, 255, .55), transparent 60%),
              repeating-linear-gradient(to bottom, transparent 0, transparent 25px, rgba(74, 98, 138, .15) 25px, rgba(74, 98, 138, .15) 26px),
              #f7f3dc;
-  --panel: #fafafa;
-  --panel-2: #f0f0f0;
-  --raised: #e8e8e8;
-  --line: #d0d0d0;
-  --line-soft: #e0e0e0;
-  --text: #000000;
-  --dim: #444444;
-  --faint: #888888;
-  --primary: #000000;
-  --primary-ink: #ffffff;
+  --panel: #fffcec;
+  --panel-2: #f7f1d8;
+  --raised: #fffdf3;
+  --line: #ddd2a4;
+  --line-soft: #ece4c2;
+  --text: #23324a;
+  --dim: #55637c;
+  --faint: #8f8968;
+  --primary: #23324a;
+  --primary-ink: #fbf6e3;
   --gov-bg: rgba(31, 90, 168, .12);
   --opp-bg: rgba(191, 58, 46, .12);
   --warn-bg: rgba(169, 118, 15, .14);
@@ -746,18 +676,18 @@ textarea.f-motion {
   /* The timer is a little chalkboard clock bolted to the wall — it stays
      board-dark and chalk-bright in both page themes rather than flipping
      to a white slab in Legal Pad mode. */
-  --gov: #333333; --gov-bg: rgba(111, 184, 230, .2);
-  --opp: #666666; --opp-bg: rgba(226, 131, 124, .22);
-  --warn: #ff9900; --warn-bg: rgba(232, 201, 92, .2);
-  --danger: #cc0000; --danger-bg: rgba(209, 96, 47, .22);
-  --violet: #770077; --violet-bg: rgba(180, 139, 224, .2);
+  --gov: #6fb8e6; --gov-bg: rgba(111, 184, 230, .2);
+  --opp: #e2837c; --opp-bg: rgba(226, 131, 124, .22);
+  --warn: #e8c95c; --warn-bg: rgba(232, 201, 92, .2);
+  --danger: #d1602f; --danger-bg: rgba(209, 96, 47, .22);
+  --violet: #b48be0; --violet-bg: rgba(180, 139, 224, .2);
 
   position: relative; overflow: hidden;
-  border-radius: 14px; border: 1px solid #333333;
-  background: linear-gradient(168deg, #f5f5f5 0%, #eeeeee 55%, #e8e8e8 100%);
-  color: #000000; box-shadow: var(--shadow);
+  border-radius: 14px; border: 1px solid #2c4136;
+  background: linear-gradient(168deg, #1b2b23 0%, #142019 55%, #0f1712 100%);
+  color: #eef7ec; box-shadow: var(--shadow);
 }
-.f-app[data-theme="light"] .f-timer { border-color: #cccccc; }
+.f-app[data-theme="light"] .f-timer { border-color: #263a2f; }
 .f-timer::after {
   content: ""; position: absolute; inset: 0; pointer-events: none;
   background: radial-gradient(520px 180px at 50% -30%, rgba(232, 201, 92, .13), transparent 70%);
@@ -770,21 +700,21 @@ textarea.f-motion {
 }
 .f-timer-role { padding: 10px 14px 0; position: relative; z-index: 1; }
 .f-timer-role strong { font-size: 15px; font-weight: 600; letter-spacing: -.01em; }
-.f-timer-role span { display: block; margin-top: 2px; color: #666666; font-size: 11px; }
+.f-timer-role span { display: block; margin-top: 2px; color: #9db3a4; font-size: 11px; }
 .f-timer-face { position: relative; z-index: 1; display: grid; justify-items: center; padding: 14px 14px 12px; }
 .f-clock {
   font-family: var(--font-mono); font-variant-numeric: tabular-nums;
   font-size: clamp(52px, 5.6vw, 68px); font-weight: 600; line-height: 1;
-  letter-spacing: -.045em; color: #000000;
+  letter-spacing: -.045em; color: #f2f9f0;
   transition: color .3s ease;
 }
 .f-timer.warn .f-clock { color: var(--warn); }
 .f-timer.over .f-clock { color: var(--danger); }
-.f-clock-sub { margin-top: 8px; display: flex; align-items: center; gap: 8px; font-size: 10.5px; color: #666666; }
+.f-clock-sub { margin-top: 8px; display: flex; align-items: center; gap: 8px; font-size: 10.5px; color: #9db3a4; }
 .f-phase {
   display: inline-flex; align-items: center; gap: 6px; height: 21px; padding: 0 9px;
   border-radius: 6px; font-family: var(--font-mono); font-size: 9.5px; font-weight: 700; letter-spacing: .1em;
-  background: rgba(255, 255, 255, .07); color: #444444;
+  background: rgba(255, 255, 255, .07); color: #c4d6c9;
 }
 .f-phase.poi { color: var(--gov); background: var(--gov-bg); }
 .f-phase.protect { color: var(--violet); background: var(--violet-bg); }
@@ -793,14 +723,14 @@ textarea.f-motion {
 
 .f-track {
   position: relative; z-index: 1; height: 6px; margin: 4px 14px 0;
-  border-radius: 99px; background: #e8e8e8; overflow: hidden;
+  border-radius: 99px; background: rgba(255, 255, 255, .08); overflow: hidden;
 }
 .f-track-poi { position: absolute; top: 0; bottom: 0; background: rgba(232, 201, 92, .18); }
 .f-track-fill {
   /* Chalk drawn across the board: green while there's time, then the
      warn/over states below redraw it in yellow and red chalk. */
   position: absolute; top: 0; bottom: 0; left: 0; border-radius: 99px;
-  background: linear-gradient(90deg, #999999, #666666);
+  background: linear-gradient(90deg, #3f6f57, #8fd6b0);
   transition: width .18s linear, background .3s ease;
 }
 .f-timer.warn .f-track-fill { background: linear-gradient(90deg, #e8c95c, #e2837c); }
@@ -808,7 +738,7 @@ textarea.f-motion {
 .f-track-mark { position: absolute; top: -2px; bottom: -2px; width: 1.5px; background: rgba(255, 255, 255, .35); }
 .f-track-legend {
   position: relative; z-index: 1; display: flex; justify-content: space-between;
-  padding: 6px 14px 0; font-family: var(--font-mono); color: #666666; font-size: 9.5px;
+  padding: 6px 14px 0; font-family: var(--font-mono); color: #6f8579; font-size: 9.5px;
 }
 
 .f-timer-controls {
@@ -817,33 +747,33 @@ textarea.f-motion {
 }
 .f-tbtn {
   display: grid; place-items: center; height: 36px; border-radius: 9px;
-  border: 1px solid rgba(255, 255, 255, .13); color: #333333;
+  border: 1px solid rgba(255, 255, 255, .13); color: #cfe0d3;
   font-size: 11px; font-weight: 600;
   transition: background .14s ease, border-color .14s ease, color .14s ease;
 }
-.f-tbtn:hover { background: #e8e8e8; color: #fff; }
+.f-tbtn:hover { background: rgba(255, 255, 255, .08); color: #fff; }
 .f-tbtn.go {
   display: flex; align-items: center; justify-content: center; gap: 8px;
-  background: var(--gov); border-color: transparent; color: #ffffff;
+  background: var(--gov); border-color: transparent; color: #0d1f2c;
   font-size: 12.5px; font-weight: 700;
 }
-.f-tbtn.go:hover { background: color-mix(in srgb, var(--gov) 88%, #fff); color: #ffffff; }
-.f-tbtn.go.pause { background: #e8e8e8; color: #000000; }
-.f-tbtn.go.pause:hover { background: #d8d8d8; }
+.f-tbtn.go:hover { background: color-mix(in srgb, var(--gov) 88%, #fff); color: #0d1f2c; }
+.f-tbtn.go.pause { background: rgba(255, 255, 255, .14); color: #eef7ec; }
+.f-tbtn.go.pause:hover { background: rgba(255, 255, 255, .2); }
 .f-timer-foot {
   position: relative; z-index: 1;
   display: flex; align-items: center; justify-content: space-between;
   margin-top: 12px; padding: 9px 14px; border-top: 1px solid rgba(255, 255, 255, .07);
-  color: #666666; font-size: 10.5px;
+  color: #9db3a4; font-size: 10.5px;
 }
-.f-timer-foot button { color: #444444; font-size: 10.5px; }
+.f-timer-foot button { color: #c4d6c9; font-size: 10.5px; }
 .f-timer-foot button:hover { color: #fff; }
 .f-flash {
   position: absolute; inset: 0; z-index: 2; pointer-events: none; border-radius: 14px;
   animation: f-flash .85s ease-out 1;
 }
 @keyframes f-flash {
-  0% { background: #d8d8d8; }
+  0% { background: rgba(255, 255, 255, .2); }
   100% { background: rgba(255, 255, 255, 0); }
 }
 
@@ -1072,7 +1002,7 @@ button.f-node-side {
 /* ---------- overlays ---------- */
 .f-scrim {
   position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 24px;
-  background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(4px);
+  background: rgba(8, 14, 11, .64); backdrop-filter: blur(4px);
   animation: f-fade .16s ease-out;
 }
 @keyframes f-fade { from { opacity: 0 } to { opacity: 1 } }
@@ -1547,7 +1477,7 @@ function ArgumentCard({
 /* ------------------------------------------------------------------ */
 
 export default function Home() {
-  const [theme, setTheme] = useState<Theme>("light");
+  const [theme, setTheme] = useState<Theme>("dark");
   const [motion, setMotion] = useState("THW ban targeted political advertising");
   const [govTeam, setGovTeam] = useState("Northbridge A");
   const [oppTeam, setOppTeam] = useState("Harbor B");
