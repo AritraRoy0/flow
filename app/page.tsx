@@ -142,143 +142,305 @@ const makeNode = (side: Side, speech: string, text = ""): AnalysisNode => ({
   replies: [],
 });
 
-const starterArguments = (): Argument[] => [
-  {
-    id: uid(),
-    side: "GOV",
-    speech: "PMC",
-    title: "Framework — who is the worst off actor",
-    status: "dropped",
-    starred: true,
-    collapsed: false,
-    analysis: [
-      {
-        id: uid(),
-        text: "Weigh the side that best protects people with the least ability to opt out.",
-        side: "GOV",
-        speech: "PMC",
-        replies: [
-          {
-            id: uid(),
-            text: "Opp: that standard begs the question — it assumes the harm is structural.",
-            side: "OPP",
-            speech: "LOC",
-            replies: [
-              {
-                id: uid(),
-                text: "The structure of access itself is the harms",
-                side: "GOV",
-                speech: "MG",
-                replies: [],
-              },
-            ],
-          },
-        ],
-      },
-    ],
-    examples: [],
+const sampleUBIDebate = (): { arguments: Argument[]; pois: Poi[]; notes: Record<string, string>; motion: string; govTeam: string; oppTeam: string; roundLabel: string } => ({
+  motion: "THW Implement Universal Basic Income (UBI)",
+  govTeam: "Affirm",
+  oppTeam: "Negate",
+  roundLabel: "UBI Sample Debate",
+  arguments: [
+    {
+      id: uid(),
+      side: "GOV",
+      speech: "PMC",
+      title: "Framework: Stability and freedom are the evaluation criteria",
+      status: "answered",
+      starred: true,
+      collapsed: false,
+      analysis: [
+        {
+          id: uid(),
+          text: "We should evaluate policies by their ability to stabilize income and expand real freedom from coercion.",
+          side: "GOV",
+          speech: "PMC",
+          replies: [
+            {
+              id: uid(),
+              text: "Opp: Freedom isn't just absence of coercion, it requires resources and opportunity.",
+              side: "OPP",
+              speech: "LOC",
+              replies: [
+                {
+                  id: uid(),
+                  text: "Exactly — and UBI provides the baseline resources that enable opportunity.",
+                  side: "GOV",
+                  speech: "MG",
+                  replies: [],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      examples: [],
+    },
+    {
+      id: uid(),
+      side: "GOV",
+      speech: "PMC",
+      title: "Contention 1: UBI eliminates welfare cliffs and poverty traps",
+      status: "answered",
+      starred: true,
+      collapsed: false,
+      analysis: [
+        {
+          id: uid(),
+          text: "Current welfare creates benefit cliffs where taking a raise means losing support — making work economically irrational.",
+          side: "GOV",
+          speech: "PMC",
+          replies: [
+            {
+              id: uid(),
+              text: "Opp: People still respond to marginal incentives; they're not purely trapped.",
+              side: "OPP",
+              speech: "LOC",
+              replies: [
+                {
+                  id: uid(),
+                  text: "But when the marginal return is negative, rational actors avoid it. UBI makes every additional hour worked a strict gain.",
+                  side: "GOV",
+                  speech: "MG",
+                  replies: [
+                    {
+                      id: uid(),
+                      text: "Then work disincentives come from the cost of living, not the cliff.",
+                      side: "OPP",
+                      speech: "MO",
+                      replies: [],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          id: uid(),
+          text: "Admin burden of means-testing excludes those most in need — proof, paperwork, stable housing all required.",
+          side: "GOV",
+          speech: "PMC",
+          replies: [
+            {
+              id: uid(),
+              text: "Opp: But digitization makes admin easier now than before.",
+              side: "OPP",
+              speech: "LOC",
+              replies: [
+                {
+                  id: uid(),
+                  text: "Even digitized, it requires stable internet, literacy, mental bandwidth poverty strips away.",
+                  side: "GOV",
+                  speech: "MG",
+                  replies: [],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      examples: [
+        "Welfare cliff in US: earn $1 more, lose $3 in benefits",
+        "60% of eligible UK families don't claim disability benefits due to application complexity",
+        "Universal child allowance has 95%+ uptake vs. means-tested TANF at 26% uptake",
+      ],
+    },
+    {
+      id: uid(),
+      side: "GOV",
+      speech: "PMC",
+      title: "Contention 2: UBI is an automatic recession stabilizer",
+      status: "open",
+      starred: true,
+      collapsed: false,
+      analysis: [
+        {
+          id: uid(),
+          text: "Recessions spiral when consumers cut spending → business layoffs → more consumers cut spending. UBI breaks the loop.",
+          side: "GOV",
+          speech: "PMC",
+          replies: [],
+        },
+        {
+          id: uid(),
+          text: "Low-income households spend nearly 100% of marginal income, creating high multiplier. UBI targets exactly who spends most.",
+          side: "GOV",
+          speech: "PMC",
+          replies: [],
+        },
+      ],
+      examples: [
+        "2008 tax rebates: each $1 rebate to low-income households generated $1.50-$2.00 in spending",
+        "Finland UBI trial 2017-2018 showed improved well-being without employment reduction",
+      ],
+    },
+    {
+      id: uid(),
+      side: "OPP",
+      speech: "LOC",
+      title: "Disadvantage: Institutional failure — enforcement through broken systems",
+      status: "answered",
+      starred: true,
+      collapsed: false,
+      analysis: [
+        {
+          id: uid(),
+          text: "UBI relies on IRS to distribute automatically, but IRS is underfunded and fails in crises.",
+          side: "OPP",
+          speech: "LOC",
+          replies: [
+            {
+              id: uid(),
+              text: "Gov: Actually, IRS already runs direct deposit tax refunds; UBI uses existing infrastructure.",
+              side: "GOV",
+              speech: "MG",
+              replies: [
+                {
+                  id: uid(),
+                  text: "Existing systems also fail — stimulus checks in 2020 took months for homeless populations.",
+                  side: "OPP",
+                  speech: "MO",
+                  replies: [],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      examples: [],
+    },
+    {
+      id: uid(),
+      side: "OPP",
+      speech: "LOC",
+      title: "Disadvantage: Inflation — too much money chasing finite goods",
+      status: "turned",
+      starred: false,
+      collapsed: false,
+      analysis: [
+        {
+          id: uid(),
+          text: "UBI injects trillions into the economy; prices will spike especially in housing and essentials.",
+          side: "OPP",
+          speech: "LOC",
+          replies: [
+            {
+              id: uid(),
+              text: "Gov: UBI is redistribution, not new money. It transfers from high-MPC wealthy to high-MPC poor.",
+              side: "GOV",
+              speech: "MG",
+              replies: [
+                {
+                  id: uid(),
+                  text: "But that still increases aggregate demand if funded by taxes (which have lag) or deficit spending.",
+                  side: "OPP",
+                  speech: "MO",
+                  replies: [
+                    {
+                      id: uid(),
+                      text: "Yet UBI stabilizes demand swings — status quo has sharp drops and spikes that worsen inflation dynamics.",
+                      side: "GOV",
+                      speech: "PMR",
+                      replies: [],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      examples: [],
+    },
+    {
+      id: uid(),
+      side: "OPP",
+      speech: "LOC",
+      title: "Impact turn: UBI creates dependency and reduces autonomy",
+      status: "answered",
+      starred: false,
+      collapsed: false,
+      analysis: [
+        {
+          id: uid(),
+          text: "Unconditional income support reduces the incentive to improve oneself or seek stable employment.",
+          side: "OPP",
+          speech: "LOC",
+          replies: [
+            {
+              id: uid(),
+              text: "Gov: Dependency emerges from instability, not support. UBI enables long-term planning and skill development.",
+              side: "GOV",
+              speech: "MG",
+              replies: [],
+            },
+          ],
+        },
+      ],
+      examples: [],
+    },
+    {
+      id: uid(),
+      side: "GOV",
+      speech: "MG",
+      title: "Extension: Labor market rebalancing (rising reservation wage)",
+      status: "open",
+      starred: false,
+      collapsed: false,
+      analysis: [
+        {
+          id: uid(),
+          text: "UBI raises the minimum acceptable job quality — workers refuse exploitation, forcing employers to compete on wages/conditions.",
+          side: "GOV",
+          speech: "MG",
+          replies: [],
+        },
+      ],
+      examples: ["Post-pandemic wage growth in service industries shows workers reject low-wage roles when alternatives exist"],
+    },
+  ],
+  pois: [
+    {
+      id: uid(),
+      status: "accepted",
+      text: "Don't means-tested systems already give more to those in need?",
+      speech: "PMC",
+      at: 120,
+    },
+    {
+      id: uid(),
+      status: "declined",
+      text: "Is $1000/month enough to live on?",
+      speech: "LOC",
+      at: 240,
+    },
+    {
+      id: uid(),
+      status: "accepted",
+      text: "How is UBI funded without massive tax increases?",
+      speech: "MG",
+      at: 380,
+    },
+  ],
+  notes: {
+    PMC: "Framework clash on stability+freedom vs. efficiency. Block their concern about cost by pointing to hidden existing costs (emergency services, incarceration, etc.). Lead with welfare cliffs.",
+    LOC: "Their institutional failure arg is their best. Focus on IRS dysfunction and underfunding. Don't cede that UBI is simple delivery — maintenance burden matters.",
+    MG: "They'll push inflation. Use multiplier econ: redistribution stabilizes demand. Also their dependency arg is backwards — instability causes dependency.",
+    MO: "They'll extend inflation and maybe add labor shortage. Labor shortage is actually good — forces wage competition. Inflation needs continuous excess demand.",
+    LOR: "Summary: Status quo has cliffs + volatility + hidden costs + dependency. UBI has one clear mechanism. Institutional concerns real but solvable.",
+    PMR: "They chose patchwork over replacement. We chose coherent system over fragmented failure. Economic rationality is on our side.",
   },
-  {
-    id: uid(),
-    side: "GOV",
-    speech: "PMC",
-    title: "Contention 1 — the default actually changes",
-    status: "answered",
-    starred: false,
-    collapsed: false,
-    analysis: [
-      {
-        id: uid(),
-        text: "Uptake follows the default, so switching it moves the median person.",
-        side: "GOV",
-        speech: "PMC",
-        replies: [
-          {
-            id: uid(),
-            text: "Opp: but most people actively choose outside the default.",
-            side: "OPP",
-            speech: "LOC",
-            replies: [],
-          },
-        ],
-      },
-    ],
-    examples: ["Auto-enrolment in pensions moved participation from 40% to 90%.", "NHS opt-out organ donation increased donor consent from 17% to 37%."],
-  },
-  {
-    id: uid(),
-    side: "OPP",
-    speech: "LOC",
-    title: "The mechanism never reaches the people it promises",
-    status: "answered",
-    starred: true,
-    collapsed: false,
-    analysis: [
-      {
-        id: uid(),
-        text: "Enforcement runs through institutions the worst-off already avoid.",
-        side: "OPP",
-        speech: "LOC",
-        replies: [
-          {
-            id: uid(),
-            text: "Gov: but institutions are required to track and enforce.",
-            side: "GOV",
-            speech: "MG",
-            replies: [
-              {
-                id: uid(),
-                text: "Same institutions that failed to prevent the original harm.",
-                side: "OPP",
-                speech: "MO",
-                replies: [],
-              },
-            ],
-          },
-        ],
-      },
-    ],
-    examples: ["Schools are underfunded and can't enforce new requirements."],
-  },
-  {
-    id: uid(),
-    side: "OPP",
-    speech: "LOC",
-    title: "Turns Government's welfare metric",
-    status: "open",
-    starred: false,
-    collapsed: false,
-    analysis: [
-      {
-        id: uid(),
-        text: "If we measure welfare by choice freedom, then regulation limits welfare.",
-        side: "OPP",
-        speech: "LOC",
-        replies: [],
-      },
-    ],
-    examples: [],
-  },
-  {
-    id: uid(),
-    side: "GOV",
-    speech: "MG",
-    title: "Solvency — the policy solves the original problem",
-    status: "open",
-    starred: false,
-    collapsed: false,
-    analysis: [
-      {
-        id: uid(),
-        text: "Direct regulation of the harmful behaviour is the most efficient solution.",
-        side: "GOV",
-        speech: "MG",
-        replies: [],
-      },
-    ],
-    examples: [],
-  },
-];
+});
+
+const starterArguments = (): Argument[] => sampleUBIDebate().arguments;
 
 /* -- tree operations ------------------------------------------------- */
 
@@ -2023,6 +2185,24 @@ export default function Home() {
         </div>
         <span className="f-saved">{savedLabel}</span>
         <div className="f-top-actions">
+          <button
+            type="button"
+            className="f-btn"
+            onClick={() => {
+              const sample = sampleUBIDebate();
+              setMotion(sample.motion);
+              setGovTeam(sample.govTeam);
+              setOppTeam(sample.oppTeam);
+              setRoundLabel(sample.roundLabel);
+              setArgumentsList(sample.arguments);
+              setPois(sample.pois);
+              setNotes(sample.notes);
+              setToast("Sample UBI debate loaded!");
+            }}
+            title="Load a sample debate flow"
+          >
+            📚 Load sample
+          </button>
           <button
             type="button"
             className="f-btn icon"
