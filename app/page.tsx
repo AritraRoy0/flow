@@ -49,6 +49,26 @@ type Argument = {
   examples: string[];
 };
 
+/** Who is ahead on a clash right now. */
+type Lean = "GOV" | "OPP" | "even";
+/** How much of the round rides on a clash. */
+type Weight = "high" | "medium" | "low";
+
+type Clash = {
+  id: string;
+  title: string;
+  lean: Lean;
+  weight: Weight;
+  starred: boolean;
+  collapsed: boolean;
+  /** Speech the clash was first written down in. */
+  speech: string;
+  /** The comparative — why this side wins it and why it outweighs the rest. */
+  weighing: string;
+  analysis: AnalysisNode[];
+  examples: string[];
+};
+
 type Poi = {
   id: string;
   status: "accepted" | "declined";
@@ -97,6 +117,22 @@ const STATUS_META: Record<Status, { label: string; hint: string }> = {
 
 const STATUS_ORDER: Status[] = ["open", "answered", "dropped", "turned"];
 
+const LEAN_META: Record<Lean, { label: string; short: string; hint: string }> = {
+  GOV: { label: "GOV ahead", short: "GOV", hint: "Government is winning this clash" },
+  even: { label: "Too close", short: "EVEN", hint: "Neither side has broken this open yet" },
+  OPP: { label: "OPP ahead", short: "OPP", hint: "Opposition is winning this clash" },
+};
+
+const LEAN_ORDER: Lean[] = ["GOV", "even", "OPP"];
+
+const WEIGHT_META: Record<Weight, { label: string; hint: string }> = {
+  high: { label: "Round-winning", hint: "Whoever takes this clash takes the round" },
+  medium: { label: "Contributory", hint: "Matters, but it will not decide the round alone" },
+  low: { label: "Peripheral", hint: "Don't spend rebuttal time here" },
+};
+
+const WEIGHT_ORDER: Weight[] = ["high", "medium", "low"];
+
 const FILTERS: { key: Filter; label: string }[] = [
   { key: "all", label: "All" },
   { key: "open", label: "Open" },
@@ -142,7 +178,29 @@ const makeNode = (side: Side, speech: string, text = ""): AnalysisNode => ({
   replies: [],
 });
 
-const sampleUBIDebate = (): { arguments: Argument[]; pois: Poi[]; notes: Record<string, string>; motion: string; govTeam: string; oppTeam: string; roundLabel: string } => ({
+const makeClash = (title: string, speech: string, side: Side): Clash => ({
+  id: uid(),
+  title,
+  lean: "even",
+  weight: "medium",
+  starred: false,
+  collapsed: false,
+  speech,
+  weighing: "",
+  analysis: [makeNode(side, speech)],
+  examples: [],
+});
+
+const sampleUBIDebate = (): {
+  arguments: Argument[];
+  clashes: Clash[];
+  pois: Poi[];
+  notes: Record<string, string>;
+  motion: string;
+  govTeam: string;
+  oppTeam: string;
+  roundLabel: string;
+} => ({
   motion: "THW Implement Universal Basic Income (UBI)",
   govTeam: "Affirm",
   oppTeam: "Negate",
@@ -407,6 +465,135 @@ const sampleUBIDebate = (): { arguments: Argument[]; pois: Poi[]; notes: Record<
       examples: ["Post-pandemic wage growth in service industries shows workers reject low-wage roles when alternatives exist"],
     },
   ],
+  clashes: [
+    {
+      id: uid(),
+      title: "Work incentives: welfare cliffs vs. dependency",
+      lean: "GOV",
+      weight: "high",
+      starred: true,
+      collapsed: false,
+      speech: "MG",
+      weighing:
+        "Both sides agree work matters — the question is which system distorts it more. Gov's harm is documented and structural (a negative marginal return), Opp's is speculative and contradicted by every trial. Prefer measured effects over predicted ones.",
+      analysis: [
+        {
+          id: uid(),
+          text: "Gov: the cliff makes the marginal hour worth less than nothing — that's a mechanical disincentive, not a behavioural guess.",
+          side: "GOV",
+          speech: "MG",
+          replies: [
+            {
+              id: uid(),
+              text: "Opp: unconditional cash still weakens the pull toward work at the bottom of the ladder.",
+              side: "OPP",
+              speech: "MO",
+              replies: [
+                {
+                  id: uid(),
+                  text: "Gov: trials measured this directly — hours barely move, and the ones that drop are students and new parents.",
+                  side: "GOV",
+                  speech: "PMR",
+                  replies: [],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          id: uid(),
+          text: "Opp never contests that the cliff exists — only that people respond to it. Dropped: the 60% non-claim rate.",
+          side: "GOV",
+          speech: "PMR",
+          replies: [],
+        },
+      ],
+      examples: [
+        "Finland 2017–18: employment flat, well-being up — direct test of the dependency claim",
+        "DROPPED by Opp: 95% uptake on universal child allowance vs. 26% on means-tested TANF",
+      ],
+    },
+    {
+      id: uid(),
+      title: "Macro effect: inflation vs. automatic stabilisation",
+      lean: "even",
+      weight: "high",
+      starred: true,
+      collapsed: false,
+      speech: "MO",
+      weighing:
+        "Turns on funding: tax-funded UBI is redistribution (Gov wins), deficit-funded is new demand (Opp wins). Neither side has pinned the funding model down — whoever specifies it first in rebuttal takes the clash.",
+      analysis: [
+        {
+          id: uid(),
+          text: "Opp: trillions injected into fixed housing stock spikes prices exactly where the poor spend.",
+          side: "OPP",
+          speech: "LOC",
+          replies: [
+            {
+              id: uid(),
+              text: "Gov: it's a transfer, not new money — MPC shifts, aggregate demand doesn't.",
+              side: "GOV",
+              speech: "MG",
+              replies: [
+                {
+                  id: uid(),
+                  text: "Opp: only if it's fully tax-funded with no lag. Deficit funding breaks that answer.",
+                  side: "OPP",
+                  speech: "MO",
+                  replies: [],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      examples: [
+        "2008 rebates: $1 to low-income households → $1.50–$2.00 of spending (cuts both ways — multiplier is also the inflation mechanism)",
+        "Housing is the contested sector — supply-constrained, so transfers show up as rent",
+      ],
+    },
+    {
+      id: uid(),
+      title: "Delivery: can the state actually get the money out?",
+      lean: "OPP",
+      weight: "medium",
+      starred: false,
+      collapsed: false,
+      speech: "LOC",
+      weighing:
+        "Opp is ahead on the facts here, but it's a solvency discount rather than a reason the policy is bad — it caps Gov's benefit, it doesn't reverse it. Weigh it below the work-incentive clash.",
+      analysis: [
+        {
+          id: uid(),
+          text: "Opp: the IRS is underfunded and unreachable for the people who need it most.",
+          side: "OPP",
+          speech: "LOC",
+          replies: [
+            {
+              id: uid(),
+              text: "Gov: the rails already exist — direct-deposit refunds run at national scale every year.",
+              side: "GOV",
+              speech: "MG",
+              replies: [
+                {
+                  id: uid(),
+                  text: "Opp: those rails miss the unbanked and the homeless — 2020 stimulus took months to reach them.",
+                  side: "OPP",
+                  speech: "MO",
+                  replies: [],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      examples: [
+        "2020 stimulus: months of delay for homeless and unbanked recipients",
+        "Gov never answered the maintenance-burden point — only the initial-build point",
+      ],
+    },
+  ],
   pois: [
     {
       id: uid(),
@@ -465,6 +652,13 @@ const retagSides = (nodes: AnalysisNode[], argSide: Side, depth: number): void =
   });
 };
 
+/* A clash has no owning side — its root lines can belong to either team — so
+   indenting inside one only re-tags the branch that actually moved. */
+const retagBranch = (node: AnalysisNode, side: Side): void => {
+  node.side = side;
+  node.replies.forEach((reply) => retagBranch(reply, other(side)));
+};
+
 const countNodes = (nodes: AnalysisNode[]): number =>
   nodes.reduce((total, node) => total + 1 + countNodes(node.replies), 0);
 
@@ -485,6 +679,7 @@ type Persisted = {
   speeches: Speech[];
   current: number;
   argumentsList: Argument[];
+  clashes: Clash[];
   pois: Poi[];
   notes: Record<string, string>;
 };
@@ -540,6 +735,29 @@ const reviveArgument = (raw: unknown): Argument => {
   };
 };
 
+const reviveClash = (raw: unknown): Clash => {
+  const item = (raw ?? {}) as Record<string, unknown>;
+  const speech = asString(item.speech) || "PMC";
+  const lean: Lean = LEAN_ORDER.includes(item.lean as Lean) ? (item.lean as Lean) : "even";
+  const weight: Weight = WEIGHT_ORDER.includes(item.weight as Weight)
+    ? (item.weight as Weight)
+    : "medium";
+  // Roots keep whatever side they were tagged with; only missing tags fall back.
+  const analysis = reviveNodes(item.analysis, lean === "OPP" ? "OPP" : "GOV", speech, 0);
+  return {
+    id: asString(item.id) || uid(),
+    title: asString(item.title, "Untitled clash"),
+    lean,
+    weight,
+    starred: item.starred === true,
+    collapsed: item.collapsed === true,
+    speech,
+    weighing: asString(item.weighing),
+    analysis,
+    examples: Array.isArray(item.examples) ? (item.examples as unknown[]).map((l) => asString(l)) : [],
+  };
+};
+
 const reviveSpeeches = (raw: unknown): Speech[] => {
   const base = makeSpeeches();
   if (!Array.isArray(raw)) return base;
@@ -583,6 +801,7 @@ const readStored = (): Partial<Persisted> | null => {
       speeches: reviveSpeeches(data.speeches),
       current: typeof data.current === "number" ? Math.min(Math.max(0, data.current), 5) : 0,
       argumentsList: (argsRaw as unknown[]).map(reviveArgument),
+      clashes: Array.isArray(data.clashes) ? (data.clashes as unknown[]).map(reviveClash) : [],
       pois: Array.isArray(data.pois) ? (data.pois as Poi[]) : [],
       notes,
     };
@@ -610,6 +829,7 @@ const buildExport = (state: {
   roundLabel: string;
   speeches: Speech[];
   argumentsList: Argument[];
+  clashes: Clash[];
   pois: Poi[];
   notes: Record<string, string>;
 }) => {
@@ -641,6 +861,28 @@ const buildExport = (state: {
       argument.examples.filter(Boolean).forEach((example) => lines.push(`  * eg. ${example}`));
     });
   });
+  if (state.clashes.length) {
+    lines.push("");
+    lines.push("## Clashes & weighing");
+    // Round-winning clashes first — that's the order a rebuttal wants them in.
+    [...state.clashes]
+      .sort((a, b) => WEIGHT_ORDER.indexOf(a.weight) - WEIGHT_ORDER.indexOf(b.weight))
+      .forEach((clash) => {
+        lines.push("");
+        lines.push(
+          `### ${clash.starred ? "★ " : ""}${clash.title} — _${LEAN_META[clash.lean].label}_ · ${
+            WEIGHT_META[clash.weight].label
+          } (noted in ${clash.speech})`,
+        );
+        const tree = nodesToText(clash.analysis, 0);
+        if (tree) lines.push(tree);
+        clash.examples.filter(Boolean).forEach((example) => lines.push(`  * eg. ${example}`));
+        if (clash.weighing.trim()) {
+          lines.push("");
+          lines.push(`> **Weighing:** ${clash.weighing.replace(/\n/g, " ")}`);
+        }
+      });
+  }
   const notes = Object.entries(state.notes).filter(([, value]) => value.trim());
   if (notes.length) {
     lines.push("");
@@ -867,6 +1109,7 @@ textarea.f-motion {
 }
 .f-tag.gov { color: var(--gov); background: var(--gov-bg); }
 .f-tag.opp { color: var(--opp); background: var(--opp-bg); }
+.f-tag.even { color: var(--dim); background: var(--raised); }
 
 .f-strip-side { display: flex; gap: 10px; flex-wrap: wrap; }
 .f-stat {
@@ -1165,13 +1408,14 @@ button.f-node-side {
 .f-add:hover { background: var(--panel-2); color: var(--text); }
 
 .f-examples { margin-top: 9px; padding-top: 9px; border-top: 1px dashed var(--line-soft); }
-.f-line { display: flex; align-items: center; gap: 5px; margin-top: 4px; }
-.f-line input {
+.f-line { display: flex; align-items: flex-start; gap: 5px; margin-top: 4px; }
+.f-line textarea {
   flex: 1; min-width: 0; padding: 5px 8px; border-radius: 7px;
   border: 1px solid var(--line-soft); background: var(--panel-2);
-  color: var(--dim); font-size: 11.5px;
+  color: var(--dim); font-size: 11.5px; line-height: 1.45; overflow: hidden;
 }
-.f-line input:focus { border-color: var(--line); color: var(--text); }
+.f-line textarea:focus { border-color: var(--line); color: var(--text); }
+.f-line .f-icon { flex: 0 0 auto; margin-top: 1px; }
 
 .f-card-foot {
   display: flex; align-items: center; justify-content: space-between; gap: 8px;
@@ -1192,6 +1436,87 @@ button.f-node-side {
   padding: 22px 14px; border: 1px dashed var(--line); border-radius: 11px;
   color: var(--faint); font-size: 11.5px; text-align: center; line-height: 1.6;
 }
+
+/* ---------- clash band ---------- */
+/* The bottom of the page is where a round gets decided, so the clash band
+   runs the full width under the flow and stays put through every speech. */
+.f-clashes { padding: 0 24px 44px; }
+.f-clash-head {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  padding: 9px 2px 12px; border-top: 2px solid var(--violet);
+}
+.f-clash-title { display: flex; align-items: baseline; gap: 8px; }
+.f-clash-title strong { font-size: 13px; font-weight: 620; letter-spacing: -.01em; }
+.f-clash-title i { color: var(--faint); font-style: normal; font-size: 11px; }
+.f-tally { display: flex; align-items: center; gap: 6px; margin-left: auto; }
+.f-tally-pill {
+  display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 9px;
+  border-radius: 7px; background: var(--panel-2); border: 1px solid var(--line-soft);
+  font-family: var(--font-mono); font-size: 10px; font-weight: 650; color: var(--dim);
+}
+.f-tally-pill b { font-size: 11.5px; font-weight: 750; }
+.f-tally-pill.gov b { color: var(--gov); }
+.f-tally-pill.opp b { color: var(--opp); }
+
+.f-clash-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 12px; align-items: start;
+}
+.f-clash {
+  border: 1px solid var(--line); border-left: 3px solid var(--line);
+  border-radius: 12px; background: var(--panel);
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.f-clash:hover { box-shadow: var(--shadow); }
+.f-clash.lean-GOV { border-left-color: var(--gov); }
+.f-clash.lean-OPP { border-left-color: var(--opp); }
+.f-clash.lean-even { border-left-color: var(--faint); }
+.f-clash.starred { border-color: color-mix(in srgb, var(--warn) 45%, var(--line)); }
+.f-clash-top { display: flex; align-items: flex-start; gap: 8px; padding: 10px 10px 8px; }
+textarea.f-clash-name {
+  display: block; width: 100%; padding: 1px 5px; border-radius: 6px;
+  border: 1px solid transparent; background: transparent;
+  font-size: 13.5px; font-weight: 600; letter-spacing: -.012em; line-height: 1.32;
+  color: var(--text); overflow: hidden;
+}
+.f-clash-name:hover { border-color: var(--line-soft); }
+.f-clash-name:focus { border-color: var(--line); background: var(--panel-2); }
+
+/* The weighing bar: who's ahead, and how much of the round rides on it. */
+.f-weigh-bar {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  padding: 0 10px 10px;
+}
+.f-lean {
+  display: inline-flex; padding: 3px; border-radius: 9px;
+  border: 1px solid var(--line); background: var(--panel-2);
+}
+.f-lean button {
+  height: 22px; padding: 0 9px; border-radius: 6px;
+  font-family: var(--font-mono); font-size: 9.5px; font-weight: 700; letter-spacing: .06em;
+  color: var(--faint); transition: background .13s ease, color .13s ease;
+}
+.f-lean button:hover { color: var(--text); }
+.f-lean button.gov[aria-pressed="true"] { background: var(--gov-bg); color: var(--gov); }
+.f-lean button.opp[aria-pressed="true"] { background: var(--opp-bg); color: var(--opp); }
+.f-lean button.even[aria-pressed="true"] { background: var(--raised); color: var(--text); }
+.f-chip.w-high { color: var(--danger); background: var(--danger-bg); }
+.f-chip.w-high .f-dot { background: var(--danger); }
+.f-chip.w-medium { color: var(--warn); background: var(--warn-bg); }
+.f-chip.w-medium .f-dot { background: var(--warn); }
+.f-chip.w-low { color: var(--faint); background: var(--panel-2); }
+.f-chip.w-low .f-dot { background: var(--faint); }
+
+.f-clash-sec { margin-top: 10px; padding-top: 9px; border-top: 1px dashed var(--line-soft); }
+.f-clash-sec:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.f-clash-sec > .f-eyebrow { display: block; margin-bottom: 5px; }
+textarea.f-weigh-note {
+  display: block; width: 100%; min-height: 58px; margin-top: 2px; padding: 8px 10px;
+  border-radius: 9px; border: 1px solid var(--line-soft); background: var(--panel-2);
+  color: var(--text); font-size: 11.8px; line-height: 1.55; overflow: hidden;
+}
+.f-weigh-note::placeholder { color: var(--faint); }
+.f-weigh-note:focus { border-color: var(--line); }
 
 /* ---------- right rail ---------- */
 .f-notes {
@@ -1306,6 +1631,9 @@ button.f-node-side {
   .f-top { padding: 0 14px; }
   .f-strip { padding: 18px 16px 16px; }
   .f-saved { display: none; }
+  .f-clashes { padding: 0 16px 40px; }
+  .f-clash-grid { grid-template-columns: minmax(0, 1fr); }
+  .f-tally { margin-left: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .f-app *, .f-app *::before, .f-app *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
@@ -1345,6 +1673,13 @@ function AutoTextarea({
   useEffect(() => {
     resize();
   }, [value, resize]);
+
+  // Re-measure when the column width changes, or a line that wrapped at one
+  // width keeps the height it needed at the other.
+  useEffect(() => {
+    window.addEventListener("resize", resize);
+    return () => window.removeEventListener("resize", resize);
+  }, [resize]);
 
   useEffect(() => {
     if (!focused) return;
@@ -1487,39 +1822,41 @@ function NodeRow({
   );
 }
 
-/* ------------------------------------------------------------------ */
-/*  Argument card                                                      */
-/* ------------------------------------------------------------------ */
-
-function ArgumentCard({
-  argument,
+/* Arguments and clashes edit the same tree with the same keys; they differ
+   only in where a fresh root line's side comes from and how a structural
+   move re-tags sides. An argument belongs to one team, so depth decides the
+   side. A clash belongs to both, so only the moved branch is re-tagged. */
+function buildTreeHandlers({
+  ownerId,
+  analysis,
+  rootSide,
+  retag,
   currentSpeech,
-  patch,
-  remove,
+  commit,
   focusKey,
   setFocusKey,
 }: {
-  argument: Argument;
+  ownerId: string;
+  analysis: AnalysisNode[];
+  rootSide: Side;
+  retag: "depth" | "branch";
   currentSpeech: string;
-  patch: (id: string, next: Partial<Argument>) => void;
-  remove: (id: string) => void;
+  commit: (analysis: AnalysisNode[]) => void;
   focusKey: string | null;
   setFocusKey: (key: string | null) => void;
-}) {
-  const tone = argument.side === "GOV" ? "gov" : "opp";
-
-  // `retag` re-derives every side from depth. Only the structural moves need it;
-  // a manual side flip must survive, so plain edits leave the tags alone.
-  const writeTree = (mutate: (tree: AnalysisNode[]) => number[] | void, retag = false) => {
-    const tree = cloneNodes(argument.analysis);
+}): { handlers: NodeHandlers; addRoot: () => void } {
+  // `structural` marks the moves that change depth. Only those re-derive
+  // sides, so a manual side flip survives every plain edit.
+  const writeTree = (mutate: (tree: AnalysisNode[]) => number[] | void, structural = false) => {
+    const tree = cloneNodes(analysis);
     const nextPath = mutate(tree);
-    if (retag) retagSides(tree, argument.side, 0);
-    patch(argument.id, { analysis: tree });
-    if (nextPath) setFocusKey(`${argument.id}:${nextPath.join(".")}`);
+    if (structural && retag === "depth") retagSides(tree, rootSide, 0);
+    commit(tree);
+    if (nextPath) setFocusKey(`${ownerId}:${nextPath.join(".")}`);
   };
 
   const handlers: NodeHandlers = {
-    argId: argument.id,
+    argId: ownerId,
     focusKey,
     clearFocus: () => setFocusKey(null),
     onText: (path, text) =>
@@ -1558,6 +1895,7 @@ function ArgumentCard({
         const previous = list[index - 1];
         const [node] = list.splice(index, 1);
         previous.replies.push(node);
+        if (retag === "branch") retagBranch(node, other(previous.side));
         return [...path.slice(0, -1), index - 1, previous.replies.length - 1];
       }, true),
     onOutdent: (path) =>
@@ -1581,19 +1919,92 @@ function ArgumentCard({
 
   const addRoot = () =>
     writeTree((tree) => {
-      tree.push(makeNode(argument.side, currentSpeech));
+      tree.push(makeNode(rootSide, currentSpeech));
       return [tree.length - 1];
     });
+
+  return { handlers, addRoot };
+}
+
+/* ------------------------------------------------------------------ */
+/*  Examples list                                                      */
+/* ------------------------------------------------------------------ */
+
+/* Shared by argument and clash cards: concrete examples, cards, and the
+   pieces of evidence the other side let go. */
+function ExampleList({
+  ownerId,
+  examples,
+  onChange,
+  placeholder,
+}: {
+  ownerId: string;
+  examples: string[];
+  onChange: (next: string[]) => void;
+  placeholder: string;
+}) {
+  return (
+    <>
+      {examples.map((line, index) => (
+        <div className="f-line" key={`${ownerId}-ex-${index}`}>
+          {/* A dropped card is often a sentence, not a phrase — let it wrap
+              rather than scroll sideways out of sight. */}
+          <AutoTextarea
+            aria-label={`Example ${index + 1}`}
+            placeholder={placeholder}
+            value={line}
+            onChange={(value) => onChange(examples.map((item, i) => (i === index ? value : item)))}
+          />
+          <button
+            type="button"
+            className="f-icon del"
+            onClick={() => onChange(examples.filter((_, i) => i !== index))}
+            title="Remove example"
+          >
+            ×
+          </button>
+        </div>
+      ))}
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Argument card                                                      */
+/* ------------------------------------------------------------------ */
+
+function ArgumentCard({
+  argument,
+  currentSpeech,
+  patch,
+  remove,
+  focusKey,
+  setFocusKey,
+}: {
+  argument: Argument;
+  currentSpeech: string;
+  patch: (id: string, next: Partial<Argument>) => void;
+  remove: (id: string) => void;
+  focusKey: string | null;
+  setFocusKey: (key: string | null) => void;
+}) {
+  const tone = argument.side === "GOV" ? "gov" : "opp";
+
+  const { handlers, addRoot } = buildTreeHandlers({
+    ownerId: argument.id,
+    analysis: argument.analysis,
+    rootSide: argument.side,
+    retag: "depth",
+    currentSpeech,
+    commit: (analysis) => patch(argument.id, { analysis }),
+    focusKey,
+    setFocusKey,
+  });
 
   const cycleStatus = () => {
     const next = STATUS_ORDER[(STATUS_ORDER.indexOf(argument.status) + 1) % STATUS_ORDER.length];
     patch(argument.id, { status: next });
   };
-
-  const setExample = (index: number, value: string) =>
-    patch(argument.id, {
-      examples: argument.examples.map((line, i) => (i === index ? value : line)),
-    });
 
   return (
     <article className={`f-card ${argument.starred ? "starred" : ""}`}>
@@ -1663,28 +2074,12 @@ function ArgumentCard({
             {argument.examples.length > 0 && (
               <div className="f-examples">
                 <span className="f-eyebrow">Examples</span>
-                {argument.examples.map((line, index) => (
-                  <div className="f-line" key={`${argument.id}-ex-${index}`}>
-                    <input
-                      aria-label={`Example ${index + 1}`}
-                      placeholder="Concrete example…"
-                      value={line}
-                      onChange={(event) => setExample(index, event.target.value)}
-                    />
-                    <button
-                      type="button"
-                      className="f-icon del"
-                      onClick={() =>
-                        patch(argument.id, {
-                          examples: argument.examples.filter((_, i) => i !== index),
-                        })
-                      }
-                      title="Remove example"
-                    >
-                      ×
-                    </button>
-                  </div>
-                ))}
+                <ExampleList
+                  ownerId={argument.id}
+                  examples={argument.examples}
+                  onChange={(examples) => patch(argument.id, { examples })}
+                  placeholder="Concrete example…"
+                />
               </div>
             )}
           </div>
@@ -1697,6 +2092,178 @@ function ArgumentCard({
             >
               + example
             </button>
+          </div>
+        </>
+      )}
+    </article>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Clash card                                                         */
+/* ------------------------------------------------------------------ */
+
+function ClashCard({
+  clash,
+  currentSpeech,
+  currentSide,
+  patch,
+  remove,
+  focusKey,
+  setFocusKey,
+}: {
+  clash: Clash;
+  currentSpeech: string;
+  currentSide: Side;
+  patch: (id: string, next: Partial<Clash>) => void;
+  remove: (id: string) => void;
+  focusKey: string | null;
+  setFocusKey: (key: string | null) => void;
+}) {
+  const { handlers, addRoot } = buildTreeHandlers({
+    ownerId: clash.id,
+    analysis: clash.analysis,
+    // A clash belongs to neither team, so a fresh root line is tagged with
+    // whoever holds the floor — that's nearly always who you're flowing.
+    rootSide: currentSide,
+    retag: "branch",
+    currentSpeech,
+    commit: (analysis) => patch(clash.id, { analysis }),
+    focusKey,
+    setFocusKey,
+  });
+
+  const cycleWeight = () => {
+    const next = WEIGHT_ORDER[(WEIGHT_ORDER.indexOf(clash.weight) + 1) % WEIGHT_ORDER.length];
+    patch(clash.id, { weight: next });
+  };
+
+  const lines = countNodes(clash.analysis);
+  const leanTone = clash.lean === "GOV" ? "gov" : clash.lean === "OPP" ? "opp" : "even";
+
+  return (
+    <article className={`f-clash lean-${clash.lean} ${clash.starred ? "starred" : ""}`}>
+      <div className="f-clash-top">
+        <button
+          type="button"
+          className={`f-card-grip ${clash.collapsed ? "" : "open"}`}
+          onClick={() => patch(clash.id, { collapsed: !clash.collapsed })}
+          aria-expanded={!clash.collapsed}
+          title={clash.collapsed ? "Expand" : "Collapse"}
+        >
+          ▶
+        </button>
+        <div className="f-card-main">
+          <AutoTextarea
+            className="f-clash-name"
+            aria-label="Clash name"
+            placeholder="Name this clash…"
+            value={clash.title}
+            onChange={(value) => patch(clash.id, { title: value })}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                event.currentTarget.blur();
+              }
+            }}
+            focused={focusKey === `clash-title:${clash.id}`}
+            onFocused={() => setFocusKey(null)}
+          />
+          <div className="f-card-meta">
+            <span className={`f-tag ${leanTone}`} title={LEAN_META[clash.lean].hint}>
+              {LEAN_META[clash.lean].short}
+            </span>
+            <span>noted in {clash.speech}</span>
+            {lines > 0 && <span>· {lines} lines</span>}
+            {clash.examples.length > 0 && <span>· {clash.examples.length} eg</span>}
+            {clash.collapsed && <span>· {WEIGHT_META[clash.weight].label}</span>}
+          </div>
+        </div>
+        <div className="f-card-tools">
+          <button
+            type="button"
+            className={`f-icon ${clash.starred ? "on" : ""}`}
+            onClick={() => patch(clash.id, { starred: !clash.starred })}
+            aria-pressed={clash.starred}
+            title="Mark as a voting clash"
+          >
+            {clash.starred ? "★" : "☆"}
+          </button>
+          <button
+            type="button"
+            className="f-icon del"
+            onClick={() => remove(clash.id)}
+            title={`Delete “${clash.title || "this clash"}”`}
+          >
+            ×
+          </button>
+        </div>
+      </div>
+
+      {!clash.collapsed && (
+        <>
+          <div className="f-weigh-bar">
+            <div className="f-lean" role="group" aria-label="Who is ahead on this clash">
+              {LEAN_ORDER.map((lean) => (
+                <button
+                  type="button"
+                  key={lean}
+                  className={lean === "GOV" ? "gov" : lean === "OPP" ? "opp" : "even"}
+                  aria-pressed={clash.lean === lean}
+                  onClick={() => patch(clash.id, { lean })}
+                  title={LEAN_META[lean].hint}
+                >
+                  {LEAN_META[lean].short}
+                </button>
+              ))}
+            </div>
+            <button
+              type="button"
+              className={`f-chip w-${clash.weight}`}
+              onClick={cycleWeight}
+              title={`${WEIGHT_META[clash.weight].hint} — click to change`}
+            >
+              <i className="f-dot" />
+              {WEIGHT_META[clash.weight].label}
+            </button>
+          </div>
+
+          <div className="f-card-body">
+            <div className="f-clash-sec">
+              <span className="f-eyebrow">Analysis</span>
+              <NodeList nodes={clash.analysis} path={[]} handlers={handlers} />
+              <button type="button" className="f-add" onClick={addRoot}>
+                + line
+              </button>
+            </div>
+
+            <div className="f-clash-sec">
+              <span className="f-eyebrow">Examples &amp; dropped evidence</span>
+              <ExampleList
+                ownerId={clash.id}
+                examples={clash.examples}
+                onChange={(examples) => patch(clash.id, { examples })}
+                placeholder="Example, card, or evidence they dropped…"
+              />
+              <button
+                type="button"
+                className="f-add"
+                onClick={() => patch(clash.id, { examples: [...clash.examples, ""] })}
+              >
+                + example
+              </button>
+            </div>
+
+            <div className="f-clash-sec">
+              <span className="f-eyebrow">Weighing</span>
+              <AutoTextarea
+                className="f-weigh-note"
+                aria-label={`Weighing for ${clash.title || "this clash"}`}
+                placeholder="Why this side wins it — and why it outweighs the other clashes. Magnitude, probability, timeframe, reversibility…"
+                value={clash.weighing}
+                onChange={(value) => patch(clash.id, { weighing: value })}
+              />
+            </div>
           </div>
         </>
       )}
@@ -1723,12 +2290,14 @@ export default function Home() {
   const [now, setNow] = useState(() => Date.now());
 
   const [argumentsList, setArgumentsList] = useState<Argument[]>(sample.arguments);
+  const [clashes, setClashes] = useState<Clash[]>(sample.clashes);
   const [pois, setPois] = useState<Poi[]>(sample.pois);
   const [notes, setNotes] = useState<Record<string, string>>(sample.notes);
 
   const [filter, setFilter] = useState<Filter>("all");
   const [query, setQuery] = useState("");
   const [draft, setDraft] = useState<Record<Side, string>>({ GOV: "", OPP: "" });
+  const [clashDraft, setClashDraft] = useState("");
   const [poiText, setPoiText] = useState("");
   const [focusKey, setFocusKey] = useState<string | null>(null);
 
@@ -1743,6 +2312,7 @@ export default function Home() {
   const govInputRef = useRef<HTMLInputElement>(null);
   const oppInputRef = useRef<HTMLInputElement>(null);
   const notesRef = useRef<HTMLTextAreaElement>(null);
+  const clashInputRef = useRef<HTMLInputElement>(null);
 
   const speech = speeches[current];
 
@@ -1799,6 +2369,7 @@ export default function Home() {
     if (data.speeches) setSpeeches(data.speeches);
     if (typeof data.current === "number") setCurrent(data.current);
     if (data.argumentsList) setArgumentsList(data.argumentsList);
+    if (data.clashes) setClashes(data.clashes);
     if (data.pois) setPois(data.pois);
     if (data.notes) setNotes(data.notes);
   }, []);
@@ -1831,6 +2402,7 @@ export default function Home() {
         speeches: speeches.map((item) => ({ ...item, startedAt: undefined })),
         current,
         argumentsList,
+        clashes,
         pois,
         notes,
       };
@@ -1842,7 +2414,7 @@ export default function Home() {
       }
     }, 400);
     return () => window.clearTimeout(timer);
-  }, [hydrated, motion, govTeam, oppTeam, roundLabel, grace, speeches, current, argumentsList, pois, notes]);
+  }, [hydrated, motion, govTeam, oppTeam, roundLabel, grace, speeches, current, argumentsList, clashes, pois, notes]);
 
   /* -- audible signals ---------------------------------------------- */
   const beep = useCallback(
@@ -1997,6 +2569,38 @@ export default function Home() {
     [speech.key],
   );
 
+  const patchClash = useCallback(
+    (id: string, next: Partial<Clash>) =>
+      setClashes((items) => items.map((item) => (item.id === id ? { ...item, ...next } : item))),
+    [],
+  );
+
+  const removeClash = useCallback(
+    (id: string) => setClashes((items) => items.filter((item) => item.id !== id)),
+    [],
+  );
+
+  const addClash = useCallback(
+    (title: string) => {
+      const clean = title.trim();
+      if (!clean) return;
+      const clash = makeClash(clean, speech.key, speech.side);
+      setClashes((items) => [...items, clash]);
+      setClashDraft("");
+      setFocusKey(`${clash.id}:0`);
+    },
+    [speech.key, speech.side],
+  );
+
+  // The band sits below the fold, so the shortcut has to bring it into view
+  // before the caret lands in it.
+  const jumpToClashes = useCallback(() => {
+    const input = clashInputRef.current;
+    if (!input) return;
+    input.scrollIntoView({ behavior: "smooth", block: "center" });
+    input.focus({ preventScroll: true });
+  }, []);
+
   const addPoi = useCallback(
     (status: Poi["status"]) => {
       setPois((items) => [
@@ -2009,11 +2613,12 @@ export default function Home() {
   );
 
   const resetRound = useCallback(() => {
-    if (!window.confirm("Reset the whole round? Arguments, notes, POIs and all times will be cleared.")) return;
+    if (!window.confirm("Reset the whole round? Arguments, clashes, notes, POIs and all times will be cleared.")) return;
     setSpeeches(makeSpeeches());
     setCurrent(0);
     setRunning(false);
     setArgumentsList([]);
+    setClashes([]);
     setPois([]);
     setNotes({});
     firedRef.current = new Set();
@@ -2022,17 +2627,17 @@ export default function Home() {
   }, []);
 
   const copyFlow = useCallback(async () => {
-    const text = buildExport({ motion, govTeam, oppTeam, roundLabel, speeches, argumentsList, pois, notes });
+    const text = buildExport({ motion, govTeam, oppTeam, roundLabel, speeches, argumentsList, clashes, pois, notes });
     try {
       await navigator.clipboard.writeText(text);
       setToast("Flow copied to clipboard");
     } catch {
       setToast("Clipboard blocked — try the download instead");
     }
-  }, [motion, govTeam, oppTeam, roundLabel, speeches, argumentsList, pois, notes]);
+  }, [motion, govTeam, oppTeam, roundLabel, speeches, argumentsList, clashes, pois, notes]);
 
   const downloadFlow = useCallback(() => {
-    const text = buildExport({ motion, govTeam, oppTeam, roundLabel, speeches, argumentsList, pois, notes });
+    const text = buildExport({ motion, govTeam, oppTeam, roundLabel, speeches, argumentsList, clashes, pois, notes });
     const blob = new Blob([text], { type: "text/markdown;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -2041,15 +2646,15 @@ export default function Home() {
     link.click();
     URL.revokeObjectURL(url);
     setToast("Flow downloaded");
-  }, [motion, govTeam, oppTeam, roundLabel, speeches, argumentsList, pois, notes]);
+  }, [motion, govTeam, oppTeam, roundLabel, speeches, argumentsList, clashes, pois, notes]);
 
   /* -- keyboard ------------------------------------------------------ */
   // Kept in refs so the listener can bind once and still see fresh values.
   const currentRef = useRef(current);
-  const actions = useRef({ toggle, goTo, adjust, resetSpeech, copyFlow, addPoi });
+  const actions = useRef({ toggle, goTo, adjust, resetSpeech, copyFlow, addPoi, jumpToClashes });
   useEffect(() => {
     currentRef.current = current;
-    actions.current = { toggle, goTo, adjust, resetSpeech, copyFlow, addPoi };
+    actions.current = { toggle, goTo, adjust, resetSpeech, copyFlow, addPoi, jumpToClashes };
   });
 
   useEffect(() => {
@@ -2099,6 +2704,10 @@ export default function Home() {
         case "n":
           event.preventDefault();
           notesRef.current?.focus();
+          break;
+        case "c":
+          event.preventDefault();
+          actions.current.jumpToClashes();
           break;
         case "p":
           actions.current.addPoi("accepted");
@@ -2163,6 +2772,32 @@ export default function Home() {
     return result;
   }, [argumentsList]);
 
+  // Status filters are argument-only concepts, so clashes answer to the
+  // search box and to Voters (starred) — anything else leaves them all up.
+  const visibleClashes = useMemo(
+    () =>
+      clashes.filter((clash) => {
+        if (filter === "starred" && !clash.starred) return false;
+        if (!needle) return true;
+        return (
+          clash.title.toLowerCase().includes(needle) ||
+          clash.weighing.toLowerCase().includes(needle) ||
+          clash.examples.some((line) => line.toLowerCase().includes(needle)) ||
+          nodeMatches(clash.analysis, needle)
+        );
+      }),
+    [clashes, filter, needle],
+  );
+
+  const clashTally = useMemo(() => {
+    const result = { GOV: 0, OPP: 0, even: 0, key: 0 };
+    clashes.forEach((clash) => {
+      result[clash.lean] += 1;
+      if (clash.starred) result.key += 1;
+    });
+    return result;
+  }, [clashes]);
+
   const speechPois = pois.filter((poi) => poi.speech === speech.key);
   const savedLabel = savedAt ? "All changes saved" : "Local only";
 
@@ -2196,6 +2831,7 @@ export default function Home() {
               setOppTeam(sample.oppTeam);
               setRoundLabel(sample.roundLabel);
               setArgumentsList(sample.arguments);
+              setClashes(sample.clashes);
               setPois(sample.pois);
               setNotes(sample.notes);
               setToast("Sample UBI debate loaded!");
@@ -2610,6 +3246,75 @@ export default function Home() {
         </div>
       </div>
 
+      {/* ---------------- clashes & weighing ---------------- */}
+      <section className="f-clashes" aria-label="Clashes and weighing">
+        <div className="f-clash-head">
+          <span className="f-clash-title">
+            <strong>Clashes &amp; weighing</strong>
+            <i>Where the round is actually won — open in every speech</i>
+          </span>
+          <span className="f-tally">
+            <span className="f-tally-pill gov" title="Clashes Government is currently ahead on">
+              GOV <b>{clashTally.GOV}</b>
+            </span>
+            <span className="f-tally-pill" title="Clashes nobody has broken open yet">
+              EVEN <b>{clashTally.even}</b>
+            </span>
+            <span className="f-tally-pill opp" title="Clashes Opposition is currently ahead on">
+              OPP <b>{clashTally.OPP}</b>
+            </span>
+            {clashTally.key > 0 && (
+              <span className="f-tally-pill" title="Clashes marked as voting issues">
+                ★ <b>{clashTally.key}</b>
+              </span>
+            )}
+          </span>
+        </div>
+
+        <div className="f-composer" style={{ marginBottom: 12 }}>
+          <span aria-hidden>+</span>
+          <input
+            ref={clashInputRef}
+            placeholder={`New clash — noted in ${speech.key}  (C)`}
+            aria-label="New clash"
+            value={clashDraft}
+            onChange={(event) => setClashDraft(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                addClash(clashDraft);
+              }
+            }}
+          />
+        </div>
+
+        {visibleClashes.length > 0 ? (
+          <div className="f-clash-grid">
+            {visibleClashes.map((clash) => (
+              <ClashCard
+                key={clash.id}
+                clash={clash}
+                currentSpeech={speech.key}
+                currentSide={speech.side}
+                patch={patchClash}
+                remove={removeClash}
+                focusKey={focusKey}
+                setFocusKey={setFocusKey}
+              />
+            ))}
+          </div>
+        ) : (
+          <p className="f-empty">
+            {clashes.length
+              ? "No clash matches this filter."
+              : "No clashes yet — name the two or three questions this round turns on."}
+            <br />
+            Each one holds its own analysis, its examples and dropped evidence, and the comparative you
+            will give in the rebuttal.
+          </p>
+        )}
+      </section>
+
       {/* ---------------- sheets ---------------- */}
       {sheet === "setup" && (
         <div className="f-scrim" role="dialog" aria-modal="true" aria-label="Round setup" onMouseDown={() => setSheet(null)}>
@@ -2748,6 +3453,7 @@ export default function Home() {
                   ["G", "New Government argument"],
                   ["O", "New Opposition argument"],
                   ["N", "Jump to this speech's notes"],
+                  ["C", "Jump to clashes & weighing"],
                   ["P", "Log a taken POI"],
                   ["⇧P", "Log a declined POI"],
                   ["E", "Copy the whole flow"],
@@ -2761,7 +3467,7 @@ export default function Home() {
                 ))}
               </div>
               <div className="f-field">
-                <span>Inside an argument</span>
+                <span>Inside an argument or clash</span>
                 <div className="f-keys">
                   {[
                     ["⏎", "New line at the same level"],
