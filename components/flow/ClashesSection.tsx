@@ -1,6 +1,7 @@
 import type { RefObject } from "react";
 import type { Clash, ClashTally, Speech } from "@/lib/flow/types";
 import { ClashCard } from "./ClashCard";
+import { IconPlus } from "./Icons";
 
 type ClashesSectionProps = {
   clashes: Clash[];
@@ -56,8 +57,10 @@ export function ClashesSection({
         </span>
       </div>
 
-      <div className="f-composer" style={{ marginBottom: 12 }}>
-        <span aria-hidden>+</span>
+      <div className="f-composer clash">
+        <span className="f-composer-plus" aria-hidden>
+          <IconPlus size={12} />
+        </span>
         <input
           ref={clashInputRef}
           placeholder={`New clash — noted in ${speech.key}  (C)`}

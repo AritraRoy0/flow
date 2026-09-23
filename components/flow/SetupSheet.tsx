@@ -2,6 +2,7 @@ import type { Dispatch, SetStateAction } from "react";
 import { SPEECH_TEMPLATE } from "@/lib/flow/constants";
 import { formatClock } from "@/lib/flow/helpers";
 import type { Speech } from "@/lib/flow/types";
+import { IconX } from "./Icons";
 
 type SetupSheetProps = {
   onClose: () => void;
@@ -41,8 +42,8 @@ export function SetupSheet({
       <div className="f-sheet" onMouseDown={(event) => event.stopPropagation()}>
         <div className="f-sheet-head">
           <h2>Round setup</h2>
-          <button type="button" className="f-btn icon" onClick={onClose} aria-label="Close">
-            ×
+          <button type="button" className="f-btn icon ghost" onClick={onClose} aria-label="Close">
+            <IconX size={15} />
           </button>
         </div>
         <div className="f-sheet-body">
@@ -82,7 +83,7 @@ export function SetupSheet({
             <div>
               {speeches.map((item, index) => (
                 <div className="f-setup-speech" key={item.key}>
-                  <strong style={{ fontSize: 12.5 }}>{item.key}</strong>
+                  <span className={`f-tag ${item.side === "GOV" ? "gov" : "opp"}`}>{item.key}</span>
                   <input
                     aria-label={`${item.key} speaker`}
                     placeholder="Speaker name"
@@ -129,11 +130,11 @@ export function SetupSheet({
             </div>
           </div>
 
-          <div style={{ display: "flex", gap: 8, justifyContent: "space-between", alignItems: "center" }}>
+          <div className="f-sheet-actions">
             <button type="button" className="f-btn danger" onClick={resetRound}>
               Reset round
             </button>
-            <span style={{ display: "flex", gap: 8 }}>
+            <span className="f-sheet-actions-end">
               <button
                 type="button"
                 className="f-btn"

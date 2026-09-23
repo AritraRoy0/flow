@@ -1,5 +1,6 @@
 import type { Dispatch, SetStateAction } from "react";
 import type { Speech, Theme } from "@/lib/flow/types";
+import { IconBell, IconBellOff, IconBook, IconCopy, IconKeyboard, IconMoon, IconSliders, IconSun } from "./Icons";
 
 type TopBarProps = {
   running: boolean;
@@ -29,50 +30,67 @@ export function TopBar({
   return (
     <header className="f-top">
       <div className="f-brand">
-        <span className="f-brand-mark">F</span>
-        flow<em>.</em>
+        <span className="f-brand-mark">f</span>
+        <span>
+          flow<em>.</em>
+        </span>
       </div>
       <span className="f-top-divider" />
-      <div className="f-live">
+      <div className={`f-live ${running ? "on" : ""}`}>
         <i className={`f-dot ${running ? "on" : ""}`} />
         {running ? `${speech.key} speaking` : "Clock paused"}
-        <span style={{ color: "var(--faint)" }}>· APDA</span>
+        <span className="f-live-format">APDA</span>
       </div>
-      <span className="f-saved">{savedLabel}</span>
+      <span className="f-saved">
+        <i className="f-saved-dot" />
+        {savedLabel}
+      </span>
       <div className="f-top-actions">
         <button
           type="button"
-          className="f-btn"
+          className="f-btn ghost"
           onClick={onLoadSample}
           title="Load a sample debate flow"
         >
-          📚 Load sample
+          <IconBook />
+          <span className="f-btn-label">Load sample</span>
         </button>
+        <span className="f-top-divider" />
         <button
           type="button"
-          className="f-btn icon"
+          className="f-btn icon ghost"
           aria-pressed={sound}
+          aria-label={sound ? "Signal chimes on" : "Signal chimes off"}
           onClick={() => setSound((value) => !value)}
           title={sound ? "Signal chimes on" : "Signal chimes off"}
         >
-          {sound ? "🔔" : "🔕"}
+          {sound ? <IconBell /> : <IconBellOff />}
         </button>
         <button
           type="button"
-          className="f-btn icon"
+          className="f-btn icon ghost"
+          aria-label="Toggle theme"
           onClick={() => setTheme((value) => (value === "dark" ? "light" : "dark"))}
           title="Toggle theme (T)"
         >
-          {theme === "dark" ? "☀" : "☾"}
+          {theme === "dark" ? <IconSun /> : <IconMoon />}
         </button>
-        <button type="button" className="f-btn" onClick={() => openSheet("keys")} title="Keyboard shortcuts (?)">
-          ⌘ Keys
+        <button
+          type="button"
+          className="f-btn icon ghost"
+          aria-label="Keyboard shortcuts"
+          onClick={() => openSheet("keys")}
+          title="Keyboard shortcuts (?)"
+        >
+          <IconKeyboard />
         </button>
-        <button type="button" className="f-btn" onClick={() => openSheet("setup")}>
-          Round setup
+        <button type="button" className="f-btn" onClick={() => openSheet("setup")} title="Round setup">
+          <IconSliders />
+          <span className="f-btn-label">Round setup</span>
         </button>
         <button type="button" className="f-btn primary" onClick={copyFlow} title="Copy the whole flow (E)">
-          Copy flow
+          <IconCopy />
+          <span className="f-btn-label">Copy flow</span>
         </button>
       </div>
     </header>

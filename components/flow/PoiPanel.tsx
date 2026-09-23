@@ -1,5 +1,6 @@
 import type { Dispatch, SetStateAction } from "react";
 import type { Poi, Speech } from "@/lib/flow/types";
+import { IconX } from "./Icons";
 
 type PoiPanelProps = {
   speech: Speech;
@@ -46,7 +47,6 @@ export function PoiPanel({
             )}
             <input
               className="f-poi-input"
-              style={{ marginTop: poiOpen ? 0 : 8 }}
               placeholder="What was asked?"
               aria-label="Point of information note"
               value={poiText}
@@ -56,11 +56,11 @@ export function PoiPanel({
               }}
             />
             <div className="f-poi-actions">
-              <button type="button" className="f-btn" onClick={() => addPoi("accepted")}>
-                Taken (P)
+              <button type="button" className="f-btn yes" onClick={() => addPoi("accepted")}>
+                Taken <kbd className="f-kbd sm">P</kbd>
               </button>
-              <button type="button" className="f-btn" onClick={() => addPoi("declined")}>
-                Declined (⇧P)
+              <button type="button" className="f-btn no" onClick={() => addPoi("declined")}>
+                Declined <kbd className="f-kbd sm">⇧P</kbd>
               </button>
             </div>
             <div className="f-poi-list">
@@ -72,8 +72,9 @@ export function PoiPanel({
                     type="button"
                     onClick={() => setPois((items) => items.filter((item) => item.id !== poi.id))}
                     title="Remove"
+                    aria-label="Remove POI"
                   >
-                    ×
+                    <IconX size={12} />
                   </button>
                 </div>
               ))}

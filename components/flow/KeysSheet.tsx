@@ -1,3 +1,4 @@
+import { IconX } from "./Icons";
 
 type KeysSheetProps = {
   onClose: () => void;
@@ -11,8 +12,8 @@ export function KeysSheet({
       <div className="f-sheet" onMouseDown={(event) => event.stopPropagation()}>
         <div className="f-sheet-head">
           <h2>Keyboard shortcuts</h2>
-          <button type="button" className="f-btn icon" onClick={onClose} aria-label="Close">
-            ×
+          <button type="button" className="f-btn icon ghost" onClick={onClose} aria-label="Close">
+            <IconX size={15} />
           </button>
         </div>
         <div className="f-sheet-body">
@@ -54,7 +55,7 @@ export function KeysSheet({
               ))}
             </div>
           </div>
-          <p style={{ color: "var(--faint)", fontSize: 11.5, lineHeight: 1.6 }}>
+          <p className="f-sheet-note">
             Replies alternate sides automatically, so an indented line under a GOV point is tagged OPP.
             Click any side tag to override it. Everything is stored in this browser only — nothing leaves the device.
           </p>

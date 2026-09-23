@@ -4,6 +4,7 @@ import type { Clash, Side } from "@/lib/flow/types";
 import { buildTreeHandlers, NodeList } from "./AnalysisTree";
 import { AutoTextarea } from "./AutoTextarea";
 import { ExampleList } from "./ExampleList";
+import { IconChevronRight, IconStar, IconX } from "./Icons";
 
 export function ClashCard({
   clash,
@@ -53,7 +54,7 @@ export function ClashCard({
           aria-expanded={!clash.collapsed}
           title={clash.collapsed ? "Expand" : "Collapse"}
         >
-          ▶
+          <IconChevronRight size={13} />
         </button>
         <div className="f-card-main">
           <AutoTextarea
@@ -89,7 +90,7 @@ export function ClashCard({
             aria-pressed={clash.starred}
             title="Mark as a voting clash"
           >
-            {clash.starred ? "★" : "☆"}
+            <IconStar size={14} filled={clash.starred} />
           </button>
           <button
             type="button"
@@ -97,7 +98,7 @@ export function ClashCard({
             onClick={() => remove(clash.id)}
             title={`Delete “${clash.title || "this clash"}”`}
           >
-            ×
+            <IconX size={14} />
           </button>
         </div>
       </div>

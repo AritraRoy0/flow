@@ -3,6 +3,7 @@ import { FILTERS } from "@/lib/flow/constants";
 import { sideName } from "@/lib/flow/helpers";
 import type { Argument, Filter, Side, SideTally, Speech } from "@/lib/flow/types";
 import { ArgumentCard } from "./ArgumentCard";
+import { IconPlus, IconSearch, IconX } from "./Icons";
 
 type FlowBoardProps = {
   filter: Filter;
@@ -61,7 +62,7 @@ export function FlowBoard({
           ))}
         </div>
         <div className="f-search">
-          <span aria-hidden>⌕</span>
+          <IconSearch size={14} />
           <input
             placeholder="Search the flow…"
             value={query}
@@ -70,11 +71,11 @@ export function FlowBoard({
           />
           {query && (
             <button type="button" onClick={() => setQuery("")} title="Clear search" aria-label="Clear search">
-              ×
+              <IconX size={13} />
             </button>
           )}
         </div>
-        <span style={{ marginLeft: "auto", color: "var(--faint)", fontSize: 11 }}>
+        <span className="f-shown f-mono">
           {visible.length} of {argumentsList.length} shown
         </span>
       </div>
@@ -87,13 +88,13 @@ export function FlowBoard({
           return (
             <section className={`f-column ${tone}`} key={side}>
               <div className="f-col-head">
-                <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <span className="f-col-name">
                   <span className={`f-tag ${tone}`}>{side}</span>
                   <strong>{sideName(side)}</strong>
                 </span>
-                <span className="f-col-meta">
+                <span className="f-col-meta f-mono">
                   <span>{counts.open} open</span>
-                  <span>·</span>
+                  <span aria-hidden>·</span>
                   <span>{counts.total} total</span>
                 </span>
               </div>
@@ -120,8 +121,10 @@ export function FlowBoard({
                 </p>
               )}
 
-              <div className="f-composer">
-                <span aria-hidden>+</span>
+              <div className={`f-composer ${tone}`}>
+                <span className="f-composer-plus" aria-hidden>
+                  <IconPlus size={12} />
+                </span>
                 <input
                   ref={side === "GOV" ? govInputRef : oppInputRef}
                   placeholder={`New ${side} argument — logged to ${speech.key}  (${side === "GOV" ? "G" : "O"})`}

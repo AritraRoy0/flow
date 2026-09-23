@@ -1,4 +1,5 @@
 import { STATUS_META, STATUS_ORDER } from "@/lib/flow/constants";
+import { IconDownload } from "./Icons";
 import { StatusChip } from "./StatusChip";
 
 type StatusKeyProps = {
@@ -12,7 +13,8 @@ export function StatusKey({
     <section className="f-panel">
       <div className="f-panel-head">
         <span className="f-eyebrow">Status key</span>
-        <button type="button" className="f-btn" onClick={downloadFlow} style={{ height: 24 }}>
+        <button type="button" className="f-btn sm" onClick={downloadFlow}>
+          <IconDownload size={13} />
           Download .md
         </button>
       </div>

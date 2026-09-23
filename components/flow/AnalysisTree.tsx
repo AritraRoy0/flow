@@ -5,6 +5,7 @@ import { makeNode, other, sideName } from "@/lib/flow/helpers";
 import { cloneNodes, listAt, retagBranch, retagSides } from "@/lib/flow/tree";
 import type { AnalysisNode, Side } from "@/lib/flow/types";
 import { AutoTextarea } from "./AutoTextarea";
+import { IconReply, IconX } from "./Icons";
 
 export type NodeHandlers = {
   onText: (path: number[], text: string) => void;
@@ -90,10 +91,10 @@ export function NodeRow({
         />
         <span className="f-node-acts">
           <button type="button" onClick={() => handlers.onReply(path)} title="Add a reply beneath (⇥ on a new line)">
-            ↳
+            <IconReply size={12} />
           </button>
           <button type="button" onClick={() => handlers.onRemove(path)} title="Remove this line">
-            ×
+            <IconX size={12} />
           </button>
         </span>
       </div>

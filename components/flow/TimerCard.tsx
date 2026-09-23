@@ -2,6 +2,7 @@ import { PROTECTED_TIME } from "@/lib/flow/constants";
 import { formatClock } from "@/lib/flow/helpers";
 import type { TimerView } from "@/lib/flow/timer";
 import type { Speech } from "@/lib/flow/types";
+import { IconChevronLeft, IconChevronRight, IconPause, IconPlay, IconReset } from "./Icons";
 
 type TimerCardProps = {
   speech: Speech;
@@ -29,11 +30,11 @@ export function TimerCard({
   const { elapsed, remaining, overBy, progress, phase, phaseLabel, phaseTone, timerTone } = timer;
 
   return (
-    <div className={`f-timer ${timerTone}`}>
+    <div className={`f-timer ${timerTone} ${running ? "running" : ""}`} data-side={speech.side}>
       <span className="f-flash" key={`${speech.key}-${phase}`} />
       <div className="f-timer-head">
         <span className={`f-tag ${speech.side === "GOV" ? "gov" : "opp"}`}>{speech.side}</span>
-        <span className="f-mono" style={{ color: "#9db3a4", fontSize: 11 }}>
+        <span className="f-timer-count f-mono">
           Speech {current + 1} of {speeches.length}
         </span>
       </div>
@@ -90,7 +91,8 @@ export function TimerCard({
           onClick={toggle}
           title="Start or pause (Space)"
         >
-          {running ? "❚❚ Pause" : remaining < 0 ? "▶ Resume" : elapsed > 0 ? "▶ Resume" : "▶ Start speech"}
+          {running ? <IconPause size={13} /> : <IconPlay size={13} />}
+          {running ? "Pause" : remaining < 0 ? "Resume" : elapsed > 0 ? "Resume" : "Start speech"}
         </button>
         <button type="button" className="f-tbtn" onClick={() => adjust(30)} title="Lengthen by 30s (+)">
           +30
@@ -98,13 +100,13 @@ export function TimerCard({
       </div>
       <div className="f-timer-foot">
         <button type="button" onClick={() => goTo(current - 1)} disabled={current === 0}>
-          ← Prev
+          <IconChevronLeft size={13} /> Prev
         </button>
         <button type="button" onClick={resetSpeech} title="Reset this speech clock (R)">
-          ↺ Reset speech
+          <IconReset size={12} /> Reset speech
         </button>
         <button type="button" onClick={() => goTo(current + 1)} disabled={current === speeches.length - 1}>
-          Next →
+          Next <IconChevronRight size={13} />
         </button>
       </div>
     </div>

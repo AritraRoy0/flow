@@ -1,4 +1,5 @@
 import { AutoTextarea } from "./AutoTextarea";
+import { IconX } from "./Icons";
 
 /* Shared by argument and clash cards: concrete examples, cards, and the
    pieces of evidence the other side let go. */
@@ -31,7 +32,7 @@ export function ExampleList({
             onClick={() => onChange(examples.filter((_, i) => i !== index))}
             title="Remove example"
           >
-            ×
+            <IconX size={13} />
           </button>
         </div>
       ))}

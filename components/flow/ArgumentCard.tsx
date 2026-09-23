@@ -4,6 +4,7 @@ import type { Argument } from "@/lib/flow/types";
 import { buildTreeHandlers, NodeList } from "./AnalysisTree";
 import { AutoTextarea } from "./AutoTextarea";
 import { ExampleList } from "./ExampleList";
+import { IconChevronRight, IconStar, IconX } from "./Icons";
 import { StatusChip } from "./StatusChip";
 
 export function ArgumentCard({
@@ -40,7 +41,7 @@ export function ArgumentCard({
   };
 
   return (
-    <article className={`f-card ${argument.starred ? "starred" : ""}`}>
+    <article className={`f-card ${tone} ${argument.starred ? "starred" : ""}`}>
       <div className="f-card-top">
         <button
           type="button"
@@ -49,7 +50,7 @@ export function ArgumentCard({
           aria-expanded={!argument.collapsed}
           title={argument.collapsed ? "Expand" : "Collapse"}
         >
-          ▶
+          <IconChevronRight size={13} />
         </button>
         <div className="f-card-main">
           <AutoTextarea
@@ -83,7 +84,7 @@ export function ArgumentCard({
             aria-pressed={argument.starred}
             title="Mark as a voting issue"
           >
-            {argument.starred ? "★" : "☆"}
+            <IconStar size={14} filled={argument.starred} />
           </button>
           <button
             type="button"
@@ -91,7 +92,7 @@ export function ArgumentCard({
             onClick={() => remove(argument.id)}
             title={`Delete “${argument.title}”`}
           >
-            ×
+            <IconX size={14} />
           </button>
         </div>
       </div>
