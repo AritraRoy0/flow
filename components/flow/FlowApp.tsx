@@ -543,6 +543,7 @@ export function FlowApp() {
         setTheme={setTheme}
         openSheet={setSheet}
         copyFlow={copyFlow}
+        resetRound={resetRound}
       />
 
       <RoundStrip
@@ -641,7 +642,6 @@ export function FlowApp() {
           setGrace={setGrace}
           speeches={speeches}
           setSpeeches={setSpeeches}
-          resetRound={resetRound}
         />
       )}
 

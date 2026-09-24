@@ -18,7 +18,6 @@ type SetupSheetProps = {
   setGrace: (value: number) => void;
   speeches: Speech[];
   setSpeeches: Dispatch<SetStateAction<Speech[]>>;
-  resetRound: () => void;
 };
 
 export function SetupSheet({
@@ -35,7 +34,6 @@ export function SetupSheet({
   setGrace,
   speeches,
   setSpeeches,
-  resetRound,
 }: SetupSheetProps) {
   return (
     <div className="f-scrim" role="dialog" aria-modal="true" aria-label="Round setup" onMouseDown={onClose}>
@@ -131,9 +129,6 @@ export function SetupSheet({
           </div>
 
           <div className="f-sheet-actions">
-            <button type="button" className="f-btn danger" onClick={resetRound}>
-              Reset round
-            </button>
             <span className="f-sheet-actions-end">
               <button
                 type="button"

@@ -819,7 +819,7 @@ textarea.f-notes {
   display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
   padding-top: 16px; border-top: 1px solid var(--line-soft);
 }
-.f-sheet-actions-end { display: flex; gap: 8px; }
+.f-sheet-actions-end { display: flex; gap: 8px; margin-left: auto; }
 .f-sheet-note { color: var(--faint); font-size: 12px; line-height: 1.65; }
 
 .f-keys { display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; }

@@ -1,6 +1,6 @@
 import type { Dispatch, SetStateAction } from "react";
 import type { Speech, Theme } from "@/lib/flow/types";
-import { IconBell, IconBellOff, IconBook, IconCopy, IconKeyboard, IconMoon, IconSliders, IconSun } from "./Icons";
+import { IconBell, IconBellOff, IconBook, IconCopy, IconKeyboard, IconMoon, IconReset, IconSliders, IconSun } from "./Icons";
 
 type TopBarProps = {
   running: boolean;
@@ -13,6 +13,7 @@ type TopBarProps = {
   setTheme: Dispatch<SetStateAction<Theme>>;
   openSheet: (sheet: "setup" | "keys") => void;
   copyFlow: () => void;
+  resetRound: () => void;
 };
 
 export function TopBar({
@@ -26,6 +27,7 @@ export function TopBar({
   setTheme,
   openSheet,
   copyFlow,
+  resetRound,
 }: TopBarProps) {
   return (
     <header className="f-top">
@@ -54,6 +56,15 @@ export function TopBar({
         >
           <IconBook />
           <span className="f-btn-label">Load sample</span>
+        </button>
+        <button
+          type="button"
+          className="f-btn ghost danger"
+          onClick={resetRound}
+          title="Reset the whole round"
+        >
+          <IconReset />
+          <span className="f-btn-label">Reset round</span>
         </button>
         <span className="f-top-divider" />
         <button
