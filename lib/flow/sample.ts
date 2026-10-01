@@ -1,11 +1,10 @@
 import { uid } from "./helpers";
-import type { Argument, Clash, Poi } from "./types";
+import type { Argument, Clash } from "./types";
 
 export const sampleUBIDebate = (): {
   arguments: Argument[];
   clashes: Clash[];
-  pois: Poi[];
-  notes: Record<string, string>;
+  notes: string;
   motion: string;
   govTeam: string;
   oppTeam: string;
@@ -404,35 +403,12 @@ export const sampleUBIDebate = (): {
       ],
     },
   ],
-  pois: [
-    {
-      id: uid(),
-      status: "accepted",
-      text: "Don't means-tested systems already give more to those in need?",
-      speech: "PMC",
-      at: 120,
-    },
-    {
-      id: uid(),
-      status: "declined",
-      text: "Is $1000/month enough to live on?",
-      speech: "LOC",
-      at: 240,
-    },
-    {
-      id: uid(),
-      status: "accepted",
-      text: "How is UBI funded without massive tax increases?",
-      speech: "MG",
-      at: 380,
-    },
-  ],
-  notes: {
-    PMC: "Framework clash on stability+freedom vs. efficiency. Block their concern about cost by pointing to hidden existing costs (emergency services, incarceration, etc.). Lead with welfare cliffs.",
-    LOC: "Their institutional failure arg is their best. Focus on IRS dysfunction and underfunding. Don't cede that UBI is simple delivery — maintenance burden matters.",
-    MG: "They'll push inflation. Use multiplier econ: redistribution stabilizes demand. Also their dependency arg is backwards — instability causes dependency.",
-    MO: "They'll extend inflation and maybe add labor shortage. Labor shortage is actually good — forces wage competition. Inflation needs continuous excess demand.",
-    LOR: "Summary: Status quo has cliffs + volatility + hidden costs + dependency. UBI has one clear mechanism. Institutional concerns real but solvable.",
-    PMR: "They chose patchwork over replacement. We chose coherent system over fragmented failure. Economic rationality is on our side.",
-  },
+  notes: [
+    "PMC: Framework clash on stability+freedom vs. efficiency. Block their concern about cost by pointing to hidden existing costs (emergency services, incarceration, etc.). Lead with welfare cliffs.",
+    "LOC: Their institutional failure arg is their best. Focus on IRS dysfunction and underfunding. Don't cede that UBI is simple delivery — maintenance burden matters.",
+    "MG: They'll push inflation. Use multiplier econ: redistribution stabilizes demand. Also their dependency arg is backwards — instability causes dependency.",
+    "MO: They'll extend inflation and maybe add labor shortage. Labor shortage is actually good — forces wage competition. Inflation needs continuous excess demand.",
+    "LOR: Summary: Status quo has cliffs + volatility + hidden costs + dependency. UBI has one clear mechanism. Institutional concerns real but solvable.",
+    "PMR: They chose patchwork over replacement. We chose coherent system over fragmented failure. Economic rationality is on our side.",
+  ].join("\n\n"),
 });

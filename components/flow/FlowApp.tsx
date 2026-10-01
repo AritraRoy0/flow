@@ -8,12 +8,11 @@ import { readStored, type Persisted } from "@/lib/flow/persistence";
 import { sampleUBIDebate } from "@/lib/flow/sample";
 import { elapsedFor, getTimerView } from "@/lib/flow/timer";
 import { nodeMatches } from "@/lib/flow/tree";
-import type { Argument, Clash, ClashTally, Filter, Poi, Side, SideTally, Speech, Theme } from "@/lib/flow/types";
+import type { Argument, Clash, ClashTally, Filter, Side, SideTally, Speech, Theme } from "@/lib/flow/types";
 import { ClashesSection } from "./ClashesSection";
 import { FlowBoard } from "./FlowBoard";
 import { KeysSheet } from "./KeysSheet";
 import { NotesPanel } from "./NotesPanel";
-import { PoiPanel } from "./PoiPanel";
 import { RoundStrip } from "./RoundStrip";
 import { SetupSheet } from "./SetupSheet";
 import { SpeechOrder } from "./SpeechOrder";
@@ -38,14 +37,12 @@ export function FlowApp() {
 
   const [argumentsList, setArgumentsList] = useState<Argument[]>(sample.arguments);
   const [clashes, setClashes] = useState<Clash[]>(sample.clashes);
-  const [pois, setPois] = useState<Poi[]>(sample.pois);
-  const [notes, setNotes] = useState<Record<string, string>>(sample.notes);
+  const [notes, setNotes] = useState(sample.notes);
 
   const [filter, setFilter] = useState<Filter>("all");
   const [query, setQuery] = useState("");
   const [draft, setDraft] = useState<Record<Side, string>>({ GOV: "", OPP: "" });
   const [clashDraft, setClashDraft] = useState("");
-  const [poiText, setPoiText] = useState("");
   const [focusKey, setFocusKey] = useState<string | null>(null);
 
   const [sheet, setSheet] = useState<"setup" | "keys" | null>(null);
@@ -84,8 +81,7 @@ export function FlowApp() {
     if (typeof data.current === "number") setCurrent(data.current);
     if (data.argumentsList) setArgumentsList(data.argumentsList);
     if (data.clashes) setClashes(data.clashes);
-    if (data.pois) setPois(data.pois);
-    if (data.notes) setNotes(data.notes);
+    if (typeof data.notes === "string") setNotes(data.notes);
   }, []);
   /* eslint-enable react-hooks/set-state-in-effect */
 
@@ -107,7 +103,7 @@ export function FlowApp() {
     if (!hydrated) return;
     const timer = window.setTimeout(() => {
       const payload: Persisted = {
-        version: 2,
+        version: 3,
         motion,
         govTeam,
         oppTeam,
@@ -117,7 +113,6 @@ export function FlowApp() {
         current,
         argumentsList,
         clashes,
-        pois,
         notes,
       };
       try {
@@ -128,7 +123,7 @@ export function FlowApp() {
       }
     }, 400);
     return () => window.clearTimeout(timer);
-  }, [hydrated, motion, govTeam, oppTeam, roundLabel, grace, speeches, current, argumentsList, clashes, pois, notes]);
+  }, [hydrated, motion, govTeam, oppTeam, roundLabel, grace, speeches, current, argumentsList, clashes, notes]);
 
   /* -- audible signals ---------------------------------------------- */
   const beep = useCallback(
@@ -192,7 +187,6 @@ export function FlowApp() {
     setRoundLabel(sample.roundLabel);
     setArgumentsList(sample.arguments);
     setClashes(sample.clashes);
-    setPois(sample.pois);
     setNotes(sample.notes);
     setToast("Sample UBI debate loaded!");
   }, []);
@@ -328,43 +322,31 @@ export function FlowApp() {
     input.focus({ preventScroll: true });
   }, []);
 
-  const addPoi = useCallback(
-    (status: Poi["status"]) => {
-      setPois((items) => [
-        ...items,
-        { id: uid(), status, text: poiText.trim() || "No note", speech: speech.key, at: Date.now() },
-      ]);
-      setPoiText("");
-    },
-    [poiText, speech.key],
-  );
-
   const resetRound = useCallback(() => {
-    if (!window.confirm("Reset the whole round? Arguments, clashes, notes, POIs and all times will be cleared.")) return;
+    if (!window.confirm("Reset the whole round? Arguments, clashes, notes and all times will be cleared.")) return;
     setSpeeches(makeSpeeches());
     setCurrent(0);
     setRunning(false);
     setArgumentsList([]);
     setClashes([]);
-    setPois([]);
-    setNotes({});
+    setNotes("");
     firedRef.current = new Set();
     setSheet(null);
     setToast("Round cleared");
   }, []);
 
   const copyFlow = useCallback(async () => {
-    const text = buildExport({ motion, govTeam, oppTeam, roundLabel, speeches, argumentsList, clashes, pois, notes });
+    const text = buildExport({ motion, govTeam, oppTeam, roundLabel, speeches, argumentsList, clashes, notes });
     try {
       await navigator.clipboard.writeText(text);
       setToast("Flow copied to clipboard");
     } catch {
       setToast("Clipboard blocked — try the download instead");
     }
-  }, [motion, govTeam, oppTeam, roundLabel, speeches, argumentsList, clashes, pois, notes]);
+  }, [motion, govTeam, oppTeam, roundLabel, speeches, argumentsList, clashes, notes]);
 
   const downloadFlow = useCallback(() => {
-    const text = buildExport({ motion, govTeam, oppTeam, roundLabel, speeches, argumentsList, clashes, pois, notes });
+    const text = buildExport({ motion, govTeam, oppTeam, roundLabel, speeches, argumentsList, clashes, notes });
     const blob = new Blob([text], { type: "text/markdown;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -373,15 +355,15 @@ export function FlowApp() {
     link.click();
     URL.revokeObjectURL(url);
     setToast("Flow downloaded");
-  }, [motion, govTeam, oppTeam, roundLabel, speeches, argumentsList, clashes, pois, notes]);
+  }, [motion, govTeam, oppTeam, roundLabel, speeches, argumentsList, clashes, notes]);
 
   /* -- keyboard ------------------------------------------------------ */
   // Kept in refs so the listener can bind once and still see fresh values.
   const currentRef = useRef(current);
-  const actions = useRef({ toggle, goTo, adjust, resetSpeech, copyFlow, addPoi, jumpToClashes });
+  const actions = useRef({ toggle, goTo, adjust, resetSpeech, copyFlow, jumpToClashes });
   useEffect(() => {
     currentRef.current = current;
-    actions.current = { toggle, goTo, adjust, resetSpeech, copyFlow, addPoi, jumpToClashes };
+    actions.current = { toggle, goTo, adjust, resetSpeech, copyFlow, jumpToClashes };
   });
 
   useEffect(() => {
@@ -435,12 +417,6 @@ export function FlowApp() {
         case "c":
           event.preventDefault();
           actions.current.jumpToClashes();
-          break;
-        case "p":
-          actions.current.addPoi("accepted");
-          break;
-        case "P":
-          actions.current.addPoi("declined");
           break;
         case "r":
           actions.current.resetSpeech();
@@ -525,7 +501,6 @@ export function FlowApp() {
     return result;
   }, [clashes]);
 
-  const speechPois = pois.filter((poi) => poi.speech === speech.key);
   const savedLabel = savedAt ? "All changes saved" : "Local only";
 
   /* ------------------------------------------------------------------ */
@@ -596,18 +571,9 @@ export function FlowApp() {
           addArgument={addArgument}
         />
 
-        {/* ---- right: notes, POIs, legend ---- */}
+        {/* ---- right: notes, legend ---- */}
         <div className="f-col f-right">
-          <NotesPanel speech={speech} notes={notes} setNotes={setNotes} notesRef={notesRef} />
-          <PoiPanel
-            speech={speech}
-            speechPois={speechPois}
-            poiOpen={timer.poiOpen}
-            poiText={poiText}
-            setPoiText={setPoiText}
-            addPoi={addPoi}
-            setPois={setPois}
-          />
+          <NotesPanel notes={notes} setNotes={setNotes} notesRef={notesRef} />
           <StatusKey downloadFlow={downloadFlow} />
         </div>
       </div>

@@ -53,14 +53,6 @@ export type Clash = {
   examples: string[];
 };
 
-export type Poi = {
-  id: string;
-  status: "accepted" | "declined";
-  text: string;
-  speech: string;
-  at: number;
-};
-
 export type Theme = "dark" | "light";
 export type Filter = "all" | "open" | "answered" | "dropped" | "turned" | "starred";
 

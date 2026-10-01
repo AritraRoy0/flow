@@ -1,6 +1,6 @@
 import { LEAN_META, STATUS_META, WEIGHT_META, WEIGHT_ORDER } from "./constants";
 import { formatClock, sideName } from "./helpers";
-import type { AnalysisNode, Argument, Clash, Poi, Side, Speech } from "./types";
+import type { AnalysisNode, Argument, Clash, Side, Speech } from "./types";
 
 export const nodesToText = (nodes: AnalysisNode[], depth: number): string =>
   nodes
@@ -20,8 +20,7 @@ export const buildExport = (state: {
   speeches: Speech[];
   argumentsList: Argument[];
   clashes: Clash[];
-  pois: Poi[];
-  notes: Record<string, string>;
+  notes: string;
 }) => {
   const lines: string[] = [];
   lines.push(`# ${state.motion || "Untitled motion"}`);
@@ -73,18 +72,10 @@ export const buildExport = (state: {
         }
       });
   }
-  const notes = Object.entries(state.notes).filter(([, value]) => value.trim());
-  if (notes.length) {
+  if (state.notes.trim()) {
     lines.push("");
     lines.push("## Notes");
-    notes.forEach(([key, value]) => lines.push(`- **${key}**: ${value.replace(/\n/g, " ")}`));
-  }
-  if (state.pois.length) {
-    lines.push("");
-    lines.push("## Points of information");
-    state.pois.forEach((poi) =>
-      lines.push(`- **${poi.speech}** — ${poi.status === "accepted" ? "Taken" : "Declined"}: ${poi.text}`),
-    );
+    lines.push(state.notes.trim());
   }
   return lines.join("\n");
 };

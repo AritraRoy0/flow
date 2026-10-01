@@ -1,10 +1,10 @@
-import { DEFAULT_GRACE, LEAN_ORDER, LEGACY_KEY, STATUS_ORDER, STORAGE_KEY, WEIGHT_ORDER } from "./constants";
+import { DEFAULT_GRACE, LEAN_ORDER, LEGACY_KEY, SPEECH_TEMPLATE, STATUS_ORDER, STORAGE_KEY, WEIGHT_ORDER } from "./constants";
 import { makeNode, makeSpeeches, other, uid } from "./helpers";
 import { sideForDepth } from "./tree";
-import type { AnalysisNode, Argument, Clash, Lean, Poi, Side, Speech, Status, Weight } from "./types";
+import type { AnalysisNode, Argument, Clash, Lean, Side, Speech, Status, Weight } from "./types";
 
 export type Persisted = {
-  version: 2;
+  version: 3;
   motion: string;
   govTeam: string;
   oppTeam: string;
@@ -14,12 +14,28 @@ export type Persisted = {
   current: number;
   argumentsList: Argument[];
   clashes: Clash[];
-  pois: Poi[];
-  notes: Record<string, string>;
+  notes: string;
 };
 
 export const asString = (value: unknown, fallback = ""): string =>
   typeof value === "string" ? value : fallback;
+
+// Older rounds kept a notepad per speech; stitch them into the shared one
+// in speaking order so nothing is lost.
+export const reviveNotes = (raw: unknown): string => {
+  if (typeof raw === "string") return raw;
+  if (!raw || typeof raw !== "object") return "";
+  const bySpeech = raw as Record<string, unknown>;
+  const order = [
+    ...SPEECH_TEMPLATE.map((speech) => speech.key),
+    ...Object.keys(bySpeech).filter((key) => !SPEECH_TEMPLATE.some((speech) => speech.key === key)),
+  ];
+  return order
+    .map((key) => [key, asString(bySpeech[key]).trim()] as const)
+    .filter(([, text]) => text)
+    .map(([key, text]) => `${key}: ${text}`)
+    .join("\n\n");
+};
 
 export const reviveNodes = (raw: unknown, argSide: Side, speech: string, depth: number): AnalysisNode[] => {
   if (!Array.isArray(raw)) return [];
@@ -120,12 +136,7 @@ export const readStored = (): Partial<Persisted> | null => {
       : Array.isArray(data.arguments)
         ? data.arguments
         : [];
-    const notes =
-      data.notes && typeof data.notes === "object"
-        ? (data.notes as Record<string, string>)
-        : typeof data.note === "string"
-          ? { PMC: data.note }
-          : {};
+    const notes = reviveNotes(data.notes ?? data.note);
     return {
       motion: asString(data.motion),
       govTeam: asString(data.govTeam) || asString(data.proTeam),
@@ -136,7 +147,6 @@ export const readStored = (): Partial<Persisted> | null => {
       current: typeof data.current === "number" ? Math.min(Math.max(0, data.current), 5) : 0,
       argumentsList: (argsRaw as unknown[]).map(reviveArgument),
       clashes: Array.isArray(data.clashes) ? (data.clashes as unknown[]).map(reviveClash) : [],
-      pois: Array.isArray(data.pois) ? (data.pois as Poi[]) : [],
       notes,
     };
   } catch {

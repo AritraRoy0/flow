@@ -46,22 +46,15 @@ The **"📚 Load sample"** button (top-right) pre-populates the app with a compl
    - Simpler 2-layer clash
    - Shows variety in argument depth
 
-### Points of Information (3)
-- 1 ACCEPTED (high-leverage question on means-testing)
-- 1 DECLINED (cost-of-living question)
-- 1 ACCEPTED (funding question in MG)
+### Round notes
+One shared notepad that stays the same across every speech. The sample has a line per speech:
 
-Each POI includes the timing (speech time in seconds where it was asked).
-
-### Notes (by speech)
 **PMC**: Framework setup, welfare cliff focus  
 **LOC**: Institutional failure focus, IRS dysfunction  
 **MG**: Inflation rebuttal, dependency turn-around  
 **MO**: Labor shortage extension  
 **LOR**: Summary comparison  
 **PMR**: System coherence argument  
-
-Each note captures the strategic focus of that speech.
 
 ---
 
@@ -93,10 +86,9 @@ Each note captures the strategic focus of that speech.
 1. **Click "📚 Load sample"** → Debate loads instantly
 2. **Expand each card** (click the arrow) to see clash trees
 3. **Watch the timer** — use standard APDA times (PMC 7 min, LOC 8 min, etc.)
-4. **Add POIs** during speeches using the POI input panel (right side)
-5. **Mark status changes** as Opposition responds — click the status chip to cycle
-6. **Take notes** in the right panel for each speech
-7. **Export** at end with "Copy flow" button
+4. **Mark status changes** as Opposition responds — click the status chip to cycle
+5. **Take notes** in the right panel — they carry across every speech
+6. **Export** at end with "Copy flow" button
 
 ---
 
